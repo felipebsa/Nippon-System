@@ -5,9 +5,10 @@ from models.user import User
 from schemas.user import SchemaLogin, SchemaRegister, SchemaUserResponse
 from database import get_db
 from passlib.context import CryptContext
-from jose import jwt
+from jose import jwt, JWTError
 from dotenv import load_dotenv
 import os
+from fastapi.security import OAuth2PasswordBearer
 
 load_dotenv()
 router = APIRouter()
@@ -16,6 +17,23 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 pwd_context = CryptContext(schemes=['bcrypt'])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except JWTError:
+        raise HTTPException(status_code=401, detail="invalid token")
+    user_id = payload.get("user_id")
+    query = select(User).where(User.user_id==user_id)
+    db_user = db.execute(query).scalars().first()
+    if not db_user:
+        raise HTTPException(status_code=401, detail="id not found")
+    return db_user
+
+@router.get("/auth/debug")
+def get_debug(c_user = Depends(get_current_user)):
+    return {"email": c_user.email, "role": c_user.role}
 
 @router.get("/")
 def auth_home():
