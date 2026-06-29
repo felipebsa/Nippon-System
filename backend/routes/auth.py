@@ -9,6 +9,7 @@ from jose import jwt, JWTError
 from dotenv import load_dotenv
 import os
 from fastapi.security import OAuth2PasswordBearer
+from datetime import datetime, timedelta, timezone
 
 load_dotenv()
 router = APIRouter()
@@ -67,7 +68,8 @@ def acess_user(user: SchemaLogin, db: Session = Depends(get_db)):
     payload = {
         "user_id": db_user.user_id,
         "email": db_user.email,
-        "role": db_user.role
+        "role": db_user.role,
+        "exp": datetime.now(timezone.utc) + timedelta(days=30)
     }
     token = jwt.encode(payload, SECRET_KEY, ALGORITHM)
     return {"access_token": token, "token_type": "bearer"}
