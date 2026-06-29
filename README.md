@@ -16,18 +16,22 @@ Nippon Detail & Custom is a system built to manage the day-to-day operations of 
 nippon-system/
 ├── backend/
 │   ├── models/
+│   │   ├── __init__.py
 │   │   ├── user.py
 │   │   ├── client.py
 │   │   ├── vehicle.py
 │   │   ├── service.py
 │   │   └── material.py
 │   ├── schemas/
+│   │   ├── __init__.py
 │   │   ├── user.py
 │   │   ├── client.py
 │   │   ├── vehicle.py
 │   │   ├── service.py
 │   │   └── material.py
 │   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── auth.py
 │   │   ├── user.py
 │   │   ├── client.py
 │   │   ├── vehicle.py
@@ -81,6 +85,9 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | Method | Route | Description |
 |--------|-------|-------------|
 | POST | `/auth/login` | Authenticate and receive JWT token |
+| POST | `/auth/register` | Register and create JWT token |
+|--------|-------|-------------|
+| | | |
 
 ### Clients
 | Method | Route | Description |
