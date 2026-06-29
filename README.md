@@ -104,17 +104,17 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 ### Vehicles
 | Method | Route | Description |
 |--------|-------|-------------|
-| | | *Coming soon* |
+| | | |
 
 ### Services
 | Method | Route | Description |
 |--------|-------|-------------|
-| | | *Coming soon* |
+| | | |
 
 ### Materials
 | Method | Route | Description |
 |--------|-------|-------------|
-| | | *Coming soon* |
+| | | |
 
 ---
 
