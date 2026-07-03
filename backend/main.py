@@ -14,7 +14,7 @@ from routes.vehicle import router as vehicle_router
 from models.user import  User
 from models.service import Service
 from models.material import Material
-from models.client import Vehicle
+from models.client import Client
 from models.vehicle import Vehicle
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
