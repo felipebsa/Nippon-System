@@ -126,7 +126,16 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 ### Materials
 | Method | Route | Description |
 |--------|-------|-------------|
-| | | *Coming soon* |
+| POST | `/material/register` | Register a new material |
+| GET | `/material/get/all` | List all materials |
+| GET | `/material/get/id/{id}` | Get material by ID |
+| GET | `/material/get/expired/{bool}` | List expired or valid materials |
+| GET | `/material/get/available/{bool}` | List available or unavailable materials |
+| PUT | `/material/update/{id}` | Full update of a material |
+| PATCH | `/material/update/stock/{id}` | Update material stock (quantity and value) |
+| PATCH | `/material/update/available/{id}` | Toggle material available status |
+| PATCH | `/material/update/expired/{id}` | Toggle material expired status |
+| DELETE | `/material/delete/{id}` | Delete a material |
 
 ---
 
@@ -181,7 +190,15 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 ### Material
 | Field | Type | Description |
 |-------|------|-------------|
-| | | *Coming soon* |
+| material_id | Integer | Primary key |
+| name | String | Material name |
+| mark | String | Brand/manufacturer |
+| quantity | Integer | Current stock quantity |
+| value | Float | Unit price |
+| total_value | Float (computed) | Calculated automatically as quantity × value |
+| date_available | DateTime (optional) | Expiration date |
+| expired | Boolean | Whether the material is expired |
+| available | Boolean | Whether the material is available for use |
 
 ---
 
