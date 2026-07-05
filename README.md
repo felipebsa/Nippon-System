@@ -8,6 +8,8 @@ A management system built for an automotive detailing business, covering client 
 
 Nippon Detail & Custom is a system built to manage the day-to-day operations of an automotive detailing shop. It allows registering clients and their vehicles, tracking services performed, managing materials and purchases, and monitoring the shop's financial overview through automatic cost calculations.
 
+**Development notes:** the backend (models, schemas, routes, auth, database) was built entirely by me. The frontend (HTML/CSS/JS) was built with AI assistance (Claude), based on my own layout references, business requirements, and design decisions.
+
 ---
 
 ## Project Structure
@@ -32,7 +34,6 @@ nippon-system/
 │   ├── routes/
 │   │   ├── __init__.py
 │   │   ├── auth.py
-│   │   ├── user.py
 │   │   ├── client.py
 │   │   ├── vehicle.py
 │   │   ├── service.py
@@ -42,9 +43,12 @@ nippon-system/
 │   └── requirements.txt
 ├── frontend/
 │   ├── css/
-│   │   └── global.css
+│   │   ├── global.css
+│   │   └── central.css
 │   ├── js/
-│   │   └── script.js
+│   │   ├── script.js
+│   │   └── central.js
+│   ├── img/
 │   ├── index.html
 │   └── central.html
 ├── .gitignore
@@ -73,8 +77,8 @@ pip install -r requirements.txt
 python -m uvicorn main:app --reload
 ```
 
-Access the API at: **http://localhost:8000**  
-Interactive docs at: **http://localhost:8000/docs**  
+Access the API at: **http://localhost:8000**
+Interactive docs at: **http://localhost:8000/docs**
 Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ---
@@ -85,7 +89,7 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | Method | Route | Description |
 |--------|-------|-------------|
 | POST | `/auth/register` | Register a new admin user |
-| POST | `/auth/login` | Authenticate and receive JWT token |
+| POST | `/auth/login` | Authenticate and receive JWT token (OAuth2 form-data) |
 
 ### Clients
 | Method | Route | Description |
@@ -147,7 +151,7 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | user_id | Integer | Primary key |
 | username | String | Unique username |
 | pass_hash | String | Hashed password (bcrypt) |
-| role | String | User role (e.g. admin) |
+| role | String | User role (`admin` or `user`) |
 
 ### Client
 | Field | Type | Description |
@@ -183,7 +187,7 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | desc | String | Service description |
 | kind | String | Service type |
 | date_release | DateTime (optional) | Expected delivery date |
-| labor_value | Float (optional) | Labor cost |
+| value | Float | Service price |
 | finish | Boolean | Whether the service is completed |
 | created | DateTime | Registration timestamp |
 
@@ -199,6 +203,13 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | date_available | DateTime (optional) | Expiration date |
 | expired | Boolean | Whether the material is expired |
 | available | Boolean | Whether the material is available for use |
+
+---
+
+## Frontend Overview
+
+- **Public site** (`index.html`): landing page with an image carousel, service showcase, and login/register modals (JWT stored in `localStorage`).
+- **Admin area** (`central.html`): single-page app with a sidebar (Dashboard, Clients, Vehicles, Services, Materials, Status) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, and dashboard stats.
 
 ---
 
@@ -220,4 +231,4 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ## Status
 
-🚧 In development
+🚧 In development — core backend and frontend MVP functional; pending: public site content (About/Contact), light mode, delivery calendar view.
