@@ -9,12 +9,14 @@ class SchemaServiceCreate(BaseModel):
     desc: str
     date_release: Optional[datetime]
     kind: str
+    value: float
 
 class SchemaServiceUpdate(BaseModel):
     title: Optional[str]
     desc: Optional[str]
     date_release: Optional[datetime]
     kind: Optional[str]
+    value: Optional[float]
 
 class SchemaServiceFinish(BaseModel):
     finish: Optional[bool]
@@ -29,4 +31,5 @@ class SchemaServiceResponse(BaseModel):
     created: datetime
     kind: str
     finish: bool
+    value: float
 

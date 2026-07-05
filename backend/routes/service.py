@@ -22,7 +22,8 @@ def create_service(service: SchemaServiceCreate, db: Session = Depends(get_db), 
         title = service.title,
         desc = service.desc,
         date_release = service.date_release,
-        kind = service.kind
+        kind = service.kind,
+        value = service.value
     )
     db.add(db_service)
     db.commit()
@@ -72,6 +73,7 @@ def update_service(id: int, service: SchemaServiceUpdate, db: Session = Depends(
     db_service.desc = service.desc
     db_service.date_release = service.date_release
     db_service.kind = service.kind
+    db_service.value = service.value
     db.commit()
     return {"message": "succesfull update_service"}
 

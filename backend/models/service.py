@@ -17,3 +17,4 @@ class Service(Base):
     labor_value: Mapped[Optional[float]] = mapped_column()
     kind: Mapped[str] = mapped_column()
     finish: Mapped[bool] = mapped_column(default=False)
+    value: Mapped[float] = mapped_column()
