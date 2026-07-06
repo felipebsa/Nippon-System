@@ -17,14 +17,6 @@ class SchemaClientUpdate(BaseModel):
     email: Optional[str]
     tel: Optional[str]
 
-class SchemaClientAddress(BaseModel):
-    cep: Optional[str]
-    address: Optional[str]
-
-class SchemaClientContact(BaseModel):
-    email: Optional[str]
-    tel: Optional[str]
-
 class SchemaClientExpired(BaseModel):
     expired: bool
 

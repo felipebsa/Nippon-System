@@ -4,6 +4,7 @@ from sqlalchemy import select, or_
 from schemas.vehicle import SchemaVehicleActive, SchemaVehicleCreate, SchemaVehicleResponse, SchemaVehicleUpdate
 from models.vehicle import Vehicle
 from models.client import Client
+from models.service import Service
 from database import get_db 
 from routes.auth import get_current_user
 
@@ -79,5 +80,10 @@ def update_active_vehicle(id: int, vehicle: SchemaVehicleActive, db: Session=Dep
     if db_vehicle is None:
         raise HTTPException(status_code=404, detail="not found")
     db_vehicle.active = vehicle.active
+    if vehicle.active == False:
+        service_query = select(Service).where(Service.client_id==id)
+        db_services = db.execute(service_query).scalars().all()
+        for service in db_services:
+            service.finish = True
     db.commit()
     return {"message": "successful update_active_vehicle"}

@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select, or_
-from schemas.client import SchemaClientResponse, SchemaClientAddress, SchemaClientContact, SchemaClientCreate, SchemaClientUpdate, SchemaClientExpired
+from schemas.client import SchemaClientResponse, SchemaClientCreate, SchemaClientUpdate, SchemaClientExpired
 from models.client import Client
+from models.vehicle import Vehicle
+from models.service import Service
 from database import get_db 
 from routes.auth import get_current_user
 
@@ -79,28 +81,6 @@ def update_client(id: int, client: SchemaClientUpdate, db: Session=Depends(get_d
     db.commit()
     return {"message": "successful update_client"}
 
-@router.patch("/client/update/address/{id}")
-def update_address_client(id: int, client: SchemaClientAddress, db: Session=Depends(get_db), _=Depends(get_current_user)):
-    query = select(Client).where(Client.client_id==id)
-    db_client = db.execute(query).scalars().first()
-    if db_client is None:
-        raise HTTPException(status_code=404, detail="not found")
-    db_client.cep = client.cep
-    db_client.address = client.address
-    db.commit()
-    return {"message": "successful update_address_client"}
-
-@router.patch("/client/update/contact/{id}")
-def update_contact_client(id: int, client: SchemaClientContact, db: Session=Depends(get_db), _=Depends(get_current_user)):
-    query = select(Client).where(Client.client_id==id)
-    db_client = db.execute(query).scalars().first()
-    if db_client is None:
-        raise HTTPException(status_code=404, detail="not found")
-    db_client.email = client.email
-    db_client.tel = client.tel
-    db.commit()
-    return {"message": "successful update_contact_client"}
-
 @router.patch("/client/update/expired/{id}")
 def update_expired_client(id: int, client: SchemaClientExpired, db: Session=Depends(get_db), _=Depends(get_current_user)):
     query = select(Client).where(Client.client_id==id)
@@ -108,5 +88,14 @@ def update_expired_client(id: int, client: SchemaClientExpired, db: Session=Depe
     if db_client is None:
         raise HTTPException(status_code=404, detail="not found")
     db_client.expired = client.expired
+    if client.expired == True:
+        vehicle_query = select(Vehicle).where(Vehicle.client_id==id)
+        db_vehicles = db.execute(vehicle_query).scalars().all()
+        for vehicle in db_vehicles:
+            vehicle.active = False
+        service_query = select(Service).where(Service.client_id==id)
+        db_services = db.execute(service_query).scalars().all()
+        for service in db_services:
+            service.finish = True
     db.commit()
     return {"message": "successful update_expired_client"}
