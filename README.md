@@ -100,9 +100,7 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | GET | `/client/get/expired/{bool}` | List active or expired clients |
 | GET | `/client/get/incomplete` | List clients with missing contact/address info |
 | PUT | `/client/update/{id}` | Full update of a client |
-| PATCH | `/client/update/address/{id}` | Update client address |
-| PATCH | `/client/update/contact/{id}` | Update client contact info |
-| PATCH | `/client/update/expired/{id}` | Toggle client expired status |
+| PATCH | `/client/update/expired/{id}` | Toggle client expired status (cascades: deactivates the client's vehicles and marks their services as finished) |
 | DELETE | `/client/delete/{id}` | Delete a client |
 
 ### Vehicles
@@ -206,6 +204,13 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ---
 
+## Data Integrity
+
+- **Deleting** a client or vehicle cascades automatically via SQLAlchemy `relationship(cascade="all, delete-orphan")` — deleting a client removes its vehicles, which in turn removes their services.
+- **Deactivating** a client (`expired=true`) manually deactivates their vehicles and marks their pending services as finished (to preserve historical/financial records instead of deleting them).
+
+---
+
 ## Frontend Overview
 
 - **Public site** (`index.html`): landing page with an image carousel, service showcase, and login/register modals (JWT stored in `localStorage`).
@@ -231,4 +236,4 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ## Status
 
-🚧 In development — core backend and frontend MVP functional; pending: public site content (About/Contact), light mode, delivery calendar view.
+🚧 In development — core backend and frontend MVP functional, including public site content (About/Contact); pending: light mode, delivery calendar view, deployment to production hosting.
