@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func, ForeignKey
 from database import Base
 from typing import Optional
@@ -15,3 +15,4 @@ class Vehicle(Base):
     kind: Mapped[Optional[str]] = mapped_column()
     created: Mapped[datetime] = mapped_column(server_default=func.now())
     active: Mapped[bool] = mapped_column(default=True)
+    services = relationship("Service", cascade="all, delete-orphan")
