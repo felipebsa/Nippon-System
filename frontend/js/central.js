@@ -254,6 +254,14 @@ async function toggleAtivoVeiculo(id, novoValor) {
       body: JSON.stringify({ active: novoValor }),
     });
     if (tratarRespostaAuth(resp)) return;
+
+    if (!resp.ok) {
+      const erro = await resp.json().catch(() => ({}));
+      console.error(`Erro ao alternar status do veículo — status ${resp.status}:`, erro);
+      alert("Não foi possível alterar o status do veículo. Veja o console para detalhes.");
+      return;
+    }
+
     fecharModal("modal-detalhe");
     carregarVeiculos();
   } catch (err) {
@@ -548,9 +556,7 @@ function abrirDetalheCliente(id) {
   abrirModal("modal-detalhe");
 }
 
-async function toggleAtivoCliente(id, ativar) {
-  // "ativar" aqui é o valor desejado de "não expirado" — o endpoint trabalha com "expired"
-  const novoExpired = !ativar;
+async function toggleAtivoCliente(id, novoExpired) {
   try {
     const resp = await fetch(`${API_URL}/client/update/expired/${id}`, {
       method: "PATCH",
@@ -558,6 +564,14 @@ async function toggleAtivoCliente(id, ativar) {
       body: JSON.stringify({ expired: novoExpired }),
     });
     if (tratarRespostaAuth(resp)) return;
+
+    if (!resp.ok) {
+      const erro = await resp.json().catch(() => ({}));
+      console.error(`Erro ao alternar status do cliente — status ${resp.status}:`, erro);
+      alert("Não foi possível alterar o status do cliente. Veja o console para detalhes.");
+      return;
+    }
+
     fecharModal("modal-detalhe");
     carregarClientes();
   } catch (err) {
@@ -771,6 +785,14 @@ async function toggleDisponivelMaterial(id, novoValor) {
       body: JSON.stringify({ available: novoValor }),
     });
     if (tratarRespostaAuth(resp)) return;
+
+    if (!resp.ok) {
+      const erro = await resp.json().catch(() => ({}));
+      console.error(`Erro ao alternar disponibilidade — status ${resp.status}:`, erro);
+      alert("Não foi possível alterar a disponibilidade. Veja o console para detalhes.");
+      return;
+    }
+
     fecharModal("modal-detalhe");
     carregarMateriais();
   } catch (err) {
@@ -814,10 +836,23 @@ async function salvarMaterial() {
   }
 
   const editando = !!id;
-  // "expired" e "available" são obrigatórios no schema — em criação, valor padrão sensato
-  const payload = editando
-    ? { name, mark, quantity, value, date_available }
-    : { name, mark, quantity, value, date_available, expired: false, available: true };
+  let payload;
+
+  if (editando) {
+    // "expired" e "available" são obrigatórios no schema — preserva os valores atuais do material
+    const materialAtual = todosMateriais.find((m) => m.material_id === Number(id));
+    payload = {
+      name,
+      mark,
+      quantity,
+      value,
+      date_available,
+      expired: materialAtual ? materialAtual.expired : false,
+      available: materialAtual ? materialAtual.available : true,
+    };
+  } else {
+    payload = { name, mark, quantity, value, date_available, expired: false, available: true };
+  }
 
   const url = editando ? `${API_URL}/material/update/${id}` : `${API_URL}/material/register`;
   const method = editando ? "PUT" : "POST";
@@ -1065,6 +1100,14 @@ async function toggleFinalizarServico(id) {
       body: JSON.stringify({ finish: !servico.finish }),
     });
     if (tratarRespostaAuth(resp)) return;
+
+    if (!resp.ok) {
+      const erro = await resp.json().catch(() => ({}));
+      console.error(`Erro ao alternar status do serviço — status ${resp.status}:`, erro);
+      alert("Não foi possível alterar o status do serviço. Veja o console para detalhes.");
+      return;
+    }
+
     carregarServicos();
   } catch (err) {
     console.error("Erro ao alternar status do serviço:", err);
