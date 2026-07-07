@@ -25,6 +25,54 @@ img {
   display: block;
 }
 
+h1, h2, h3, h4,
+.page-title,
+.modal-title {
+  font-family: 'Oswald', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* transição suave ao trocar entre tema claro/escuro */
+body,
+.navbar,
+.modal,
+.modal-header,
+.item-card,
+.service-card,
+.about-section,
+.contact-card,
+.form-input,
+.form-select,
+input,
+select,
+textarea {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* estado de foco visível (acessibilidade) — combina com a marca em vez do azul padrão do navegador */
+:focus-visible {
+  outline: 2px solid var(--vermelho);
+  outline-offset: 2px;
+}
+
+/* scrollbar customizada (Chrome/Edge/Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fundo-pagina);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vermelho);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vermelho-hover);
+}
+
 /* ===========================
    VARIÁVEIS — TEMA ESCURO (padrão)
 =========================== */
@@ -212,6 +260,63 @@ body.light-mode .navbar {
   transform: rotate(20deg);
 }
 
+.menu-hamburguer {
+  display: none;
+  background: transparent;
+  border: 1.5px solid var(--borda);
+  color: var(--text-primario);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.menu-hamburguer:hover {
+  border-color: var(--vermelho);
+}
+
+.navbar-mobile-menu {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 88px;
+  left: 0;
+  right: 0;
+  background: var(--fundo-topbar);
+  border-bottom: 1px solid var(--borda);
+  z-index: 199;
+  padding: 8px 0;
+}
+
+.navbar-mobile-menu.aberto {
+  display: flex;
+}
+
+.navbar-mobile-menu a {
+  color: var(--text-secundario);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--borda);
+}
+
+.navbar-mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.navbar-mobile-menu a:hover,
+.navbar-mobile-menu a.active {
+  color: var(--vermelho);
+}
+
 .btn-auth {
   background: transparent;
   border: 1.5px solid var(--vermelho);
@@ -297,6 +402,15 @@ body.light-mode .navbar {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.hero-slide.active img {
+  animation: kenburns 6s ease-out forwards;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
 }
 
 .hero-overlay {
@@ -969,6 +1083,7 @@ body.light-mode .navbar {
 =========================== */
 @media (max-width: 900px) {
   .navbar-menu { display: none; }
+  .menu-hamburguer { display: flex; }
   .navbar { padding: 0 20px; }
   .hero-arrow { width: 38px; height: 38px; font-size: 16px; }
   .hero-arrow.prev { left: 10px; }

@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nippon Detail — Estética Automotiva Premium</title>
+  <link rel="icon" type="image/png" href="img/logo-flutuante.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 </head>
@@ -21,6 +25,10 @@
     </ul>
 
     <div class="navbar-right">
+      <button class="menu-hamburguer" id="menu-hamburguer" onclick="alternarMenuMobile()" title="Menu">
+        <i class="ti ti-menu-2" id="menu-hamburguer-icon"></i>
+      </button>
+
       <button class="theme-toggle" id="theme-toggle" onclick="alternarTema()" title="Alternar tema">
         <i class="ti ti-sun" id="theme-toggle-icon"></i>
       </button>
@@ -36,6 +44,14 @@
       </div>
     </div>
   </nav>
+
+  <!-- MENU MOBILE (some/aparece com o hambúrguer, só existe visualmente abaixo de 900px) -->
+  <div class="navbar-mobile-menu" id="navbar-mobile-menu">
+    <a href="#home" onclick="fecharMenuMobile()">Home</a>
+    <a href="#sobre" onclick="fecharMenuMobile()">Sobre</a>
+    <a href="#servicos" onclick="fecharMenuMobile()">Serviços</a>
+    <a href="#contato" onclick="fecharMenuMobile()">Contato</a>
+  </div>
 
   <!-- HERO / CARROSSEL -->
   <section class="hero" id="home">

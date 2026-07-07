@@ -292,6 +292,7 @@ async function salvarVeiculo() {
     return;
   }
 
+  const textoOriginal = travarBotaoSalvar("btn-salvar-veiculo");
   try {
     const resp = await fetch(`${API_URL}/vehicle/register`, {
       method: "POST",
@@ -309,6 +310,8 @@ async function salvarVeiculo() {
     carregarVeiculos();
   } catch (err) {
     mostrarErroEm("v-error", "Não foi possível conectar ao servidor.");
+  } finally {
+    destravarBotaoSalvar("btn-salvar-veiculo", textoOriginal);
   }
 }
 
@@ -337,6 +340,7 @@ async function salvarEdicaoVeiculo() {
     return;
   }
 
+  const textoOriginal = travarBotaoSalvar("btn-salvar-edicao-veiculo");
   try {
     const resp = await fetch(`${API_URL}/vehicle/update/${id}`, {
       method: "PUT",
@@ -355,6 +359,8 @@ async function salvarEdicaoVeiculo() {
     carregarVeiculos();
   } catch (err) {
     mostrarErroEm("ev-error", "Não foi possível conectar ao servidor.");
+  } finally {
+    destravarBotaoSalvar("btn-salvar-edicao-veiculo", textoOriginal);
   }
 }
 
@@ -372,6 +378,24 @@ async function apagarVeiculo(id) {
   } catch (err) {
     console.error("Erro ao apagar veículo:", err);
   }
+}
+
+// trava o botão de salvar (evita duplo clique) e troca o texto por "Salvando..."
+function travarBotaoSalvar(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return null;
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2 spin"></i> Salvando...';
+  return original;
+}
+
+// devolve o botão pro estado normal (sempre chamado no finally, dá certo ou errado)
+function destravarBotaoSalvar(btnId, textoOriginal) {
+  const btn = document.getElementById(btnId);
+  if (!btn || textoOriginal == null) return;
+  btn.disabled = false;
+  btn.innerHTML = textoOriginal;
 }
 
 // lê o "detail" que o FastAPI manda no corpo do erro e mostra a mensagem específica
@@ -640,6 +664,7 @@ async function salvarCliente() {
   const url = editando ? `${API_URL}/client/update/${id}` : `${API_URL}/client/register`;
   const method = editando ? "PUT" : "POST";
 
+  const textoOriginal = travarBotaoSalvar("btn-salvar-cliente");
   try {
     const resp = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
     if (tratarRespostaAuth(resp)) return;
@@ -652,6 +677,8 @@ async function salvarCliente() {
     carregarClientes();
   } catch (err) {
     mostrarErroEm("c-error", "Não foi possível conectar ao servidor.");
+  } finally {
+    destravarBotaoSalvar("btn-salvar-cliente", textoOriginal);
   }
 }
 
@@ -876,6 +903,7 @@ async function salvarMaterial() {
   const url = editando ? `${API_URL}/material/update/${id}` : `${API_URL}/material/register`;
   const method = editando ? "PUT" : "POST";
 
+  const textoOriginal = travarBotaoSalvar("btn-salvar-material");
   try {
     const resp = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
     if (tratarRespostaAuth(resp)) return;
@@ -888,6 +916,8 @@ async function salvarMaterial() {
     carregarMateriais();
   } catch (err) {
     mostrarErroEm("m-error", "Não foi possível conectar ao servidor.");
+  } finally {
+    destravarBotaoSalvar("btn-salvar-material", textoOriginal);
   }
 }
 
@@ -1196,6 +1226,7 @@ async function salvarServico() {
   const url = editando ? `${API_URL}/service/update/${id}` : `${API_URL}/service/register`;
   const method = editando ? "PUT" : "POST";
 
+  const textoOriginal = travarBotaoSalvar("btn-salvar-servico");
   try {
     const resp = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
     if (tratarRespostaAuth(resp)) return;
@@ -1208,6 +1239,8 @@ async function salvarServico() {
     carregarServicos();
   } catch (err) {
     mostrarErroEm("s-error", "Não foi possível conectar ao servidor.");
+  } finally {
+    destravarBotaoSalvar("btn-salvar-servico", textoOriginal);
   }
 }
 
@@ -1307,6 +1340,12 @@ async function carregarTudo() {
   await carregarVeiculos();
   await carregarServicos();
   await carregarMateriais();
+  esconderLoadingInicial();
+}
+
+function esconderLoadingInicial() {
+  const overlay = document.getElementById("loading-overlay");
+  if (overlay) overlay.classList.add("escondido");
 }
 
 // =====================================================

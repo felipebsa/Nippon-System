@@ -4,11 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Central · Nippon Detail</title>
+  <link rel="icon" type="image/png" href="img/logo-flutuante.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/central.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 </head>
 <body class="central-body">
+
+  <!-- OVERLAY DE CARREGAMENTO INICIAL — some quando todos os dados terminam de carregar -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
 
   <!-- SIDEBAR — fixa, nunca muda -->
   <aside class="sidebar">
@@ -243,7 +252,7 @@
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-veiculo')">Cancelar</button>
-        <button class="btn-red" onclick="salvarVeiculo()"><i class="ti ti-check"></i> Salvar</button>
+        <button class="btn-red" id="btn-salvar-veiculo" onclick="salvarVeiculo()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
@@ -273,7 +282,7 @@
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-editar-veiculo')">Cancelar</button>
-        <button class="btn-red" onclick="salvarEdicaoVeiculo()"><i class="ti ti-check"></i> Salvar</button>
+        <button class="btn-red" id="btn-salvar-edicao-veiculo" onclick="salvarEdicaoVeiculo()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
@@ -301,7 +310,7 @@
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-cliente')">Cancelar</button>
-        <button class="btn-red" onclick="salvarCliente()"><i class="ti ti-check"></i> Salvar</button>
+        <button class="btn-red" id="btn-salvar-cliente" onclick="salvarCliente()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
@@ -337,7 +346,7 @@
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-servico')">Cancelar</button>
-        <button class="btn-red" onclick="salvarServico()"><i class="ti ti-check"></i> Salvar</button>
+        <button class="btn-red" id="btn-salvar-servico" onclick="salvarServico()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>
@@ -364,7 +373,7 @@
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-material')">Cancelar</button>
-        <button class="btn-red" onclick="salvarMaterial()"><i class="ti ti-check"></i> Salvar</button>
+        <button class="btn-red" id="btn-salvar-material" onclick="salvarMaterial()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>
   </div>

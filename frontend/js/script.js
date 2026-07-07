@@ -249,11 +249,30 @@ function atualizarIconeTema() {
 }
 
 // =====================================================
+// MENU MOBILE (hambúrguer)
+// =====================================================
+function alternarMenuMobile() {
+  const menu = document.getElementById("navbar-mobile-menu");
+  const icon = document.getElementById("menu-hamburguer-icon");
+  if (!menu) return;
+  const aberto = menu.classList.toggle("aberto");
+  if (icon) icon.className = aberto ? "ti ti-x" : "ti ti-menu-2";
+}
+
+function fecharMenuMobile() {
+  const menu = document.getElementById("navbar-mobile-menu");
+  const icon = document.getElementById("menu-hamburguer-icon");
+  if (!menu) return;
+  menu.classList.remove("aberto");
+  if (icon) icon.className = "ti ti-menu-2";
+}
+
+// =====================================================
 // SCROLLSPY — atualiza qual link do menu fica "ativo" conforme rola a página
 // =====================================================
 function inicializarScrollspy() {
   const secoes = document.querySelectorAll("section[id]");
-  const links = document.querySelectorAll(".navbar-menu a");
+  const links = document.querySelectorAll(".navbar-menu a, .navbar-mobile-menu a");
   if (!secoes.length || !links.length) return; // essa navbar só existe no index.html
 
   function atualizarLinkAtivo() {
@@ -267,6 +286,14 @@ function inicializarScrollspy() {
         idAtual = secao.id;
       }
     });
+
+    // se a última seção for mais baixa que a tela, a conta acima nunca "alcança" ela
+    // (o navegador não deixa rolar além do necessário) — então força manualmente
+    // quando o usuário já está no fim da página, não importa o cálculo de offsetTop
+    const chegouNoFim = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    if (chegouNoFim) {
+      idAtual = secoes[secoes.length - 1].id;
+    }
 
     links.forEach((link) => {
       link.classList.toggle("active", link.getAttribute("href") === `#${idAtual}`);
