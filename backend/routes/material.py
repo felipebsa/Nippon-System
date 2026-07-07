@@ -28,7 +28,7 @@ def get_all_materials(db: Session = Depends(get_db), _=Depends(get_current_user)
     query = select(Material)
     db_materials = db.execute(query).scalars().all()
     if not db_materials:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     return db_materials
 
 @router.get("/material/get/id/{id}", response_model=list[SchemaMaterialResponse])
@@ -36,7 +36,7 @@ def get_material_by_id(id: int, db: Session = Depends(get_db), _=Depends(get_cur
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
     if db_material is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     return db_material
 
 @router.get("/material/get/expired/{bool}")
@@ -44,7 +44,7 @@ def get_expired_materials(bool: int, db: Session = Depends(get_db), _=Depends(ge
     query = select(Material).where(Material.expired==bool)
     db_materials = db.execute(query).scalars().all()
     if not db_materials:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     return db_materials
 
 @router.get("/material/get/available/{bool}")
@@ -52,7 +52,7 @@ def get_available_materials(bool: int, db: Session = Depends(get_db), _=Depends(
     query = select(Material).where(Material.available==bool)
     db_materials = db.execute(query).scalars().all()
     if not db_materials:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     return db_materials
 
 
@@ -61,7 +61,7 @@ def delete_material(id: int, db: Session = Depends(get_db), _=Depends(get_curren
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
     if db_material is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     db.delete(db_material)
     db.commit()
     return {"message": "successful delete_material"}
@@ -71,7 +71,7 @@ def update_material(id: int, material: SchemaMaterialUpdate, db: Session=Depends
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
     if db_material is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     db_material.name = material.name
     db_material.mark = material.mark
     db_material.quantity = material.quantity
@@ -87,7 +87,7 @@ def update_stock_material(id: int, material: SchemaMaterialStock, db: Session=De
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
     if db_material is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     db_material.value = material.value
     db_material.quantity = material.quantity
     db.commit()
@@ -98,7 +98,7 @@ def update_available_material(id: int, material: SchemaMaterialAvailable, db: Se
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
     if db_material is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     db_material.available = material.available
     db.commit()
     return {"message": "successful update_available_material"}
@@ -108,7 +108,7 @@ def update_expired_material(id: int, material: SchemaMaterialExpired, db: Sessio
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
     if db_material is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="material não encontrado.")
     db_material.expired = material.expired
     db.commit()
     return {"message": "successful update_expired_material"}
