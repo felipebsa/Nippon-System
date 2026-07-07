@@ -139,6 +139,10 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | PATCH | `/material/update/expired/{id}` | Toggle material expired status |
 | DELETE | `/material/delete/{id}` | Delete a material |
 
+### Error Handling
+
+All routes return a `404` with a specific `detail` message when a referenced record (client, vehicle, service, material) doesn't exist. Creating or updating a `Client` (unique `cpf`/`email`) or a `Vehicle` (unique `plate`) returns a `409 Conflict` with a specific `detail` message if the value is already registered to another record, instead of a raw database error.
+
 ---
 
 ## Data Models
@@ -213,8 +217,8 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ## Frontend Overview
 
-- **Public site** (`index.html`): landing page with an image carousel, service showcase, and login/register modals (JWT stored in `localStorage`).
-- **Admin area** (`central.html`): single-page app with a sidebar (Dashboard, Clients, Vehicles, Services, Materials, Status) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, and dashboard stats.
+- **Public site** (`index.html`): landing page with an image carousel (subtle Ken Burns zoom on the active slide), service showcase, and login/register modals (JWT stored in `localStorage`). Includes a scroll-spy navbar (active link updates automatically as you scroll), a mobile hamburger menu below 900px, scroll-triggered reveal animations on each section, and a light/dark theme toggle (persisted for the duration of the browser tab via `sessionStorage`, always starts in dark mode on a fresh visit).
+- **Admin area** (`central.html`): single-page app with a sidebar (Dashboard, Calendar, Clients, Vehicles, Services, Materials, Status) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, dashboard stats, a monthly/yearly delivery calendar (color-coded per client, hover preview, click-through to the service), an initial loading overlay, and disabled/spinner state on save buttons to prevent duplicate submissions. Shares the same theme toggle as the public site.
 
 ---
 
@@ -236,4 +240,4 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ## Status
 
-🚧 In development — core backend and frontend MVP functional, including public site content (About/Contact); pending: light mode, delivery calendar view, deployment to production hosting.
+🚧 In development — core backend and frontend MVP functional, including public site content (About/Contact), light/dark theme, and a delivery calendar view; pending: financial overview (revenue vs. expenses, with an auto-generated expense entry on material restock), a public client-facing form that pre-fills a WhatsApp message (no auto-registration), and deployment to production hosting.
