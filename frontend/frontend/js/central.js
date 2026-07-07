@@ -301,7 +301,7 @@ async function salvarVeiculo() {
     if (tratarRespostaAuth(resp)) return;
 
     if (!resp.ok) {
-      mostrarErroEm("v-error", "Não foi possível cadastrar o veículo.");
+      await mostrarErroApiEm("v-error", resp, "Não foi possível cadastrar o veículo.");
       return;
     }
 
@@ -346,7 +346,7 @@ async function salvarEdicaoVeiculo() {
     if (tratarRespostaAuth(resp)) return;
 
     if (!resp.ok) {
-      mostrarErroEm("ev-error", "Não foi possível salvar as alterações.");
+      await mostrarErroApiEm("ev-error", resp, "Não foi possível salvar as alterações.");
       return;
     }
 
@@ -372,6 +372,25 @@ async function apagarVeiculo(id) {
   } catch (err) {
     console.error("Erro ao apagar veículo:", err);
   }
+}
+
+// lê o "detail" que o FastAPI manda no corpo do erro e mostra a mensagem específica
+// (CPF duplicado, placa duplicada, cliente não encontrado, etc.) em vez de um texto genérico
+async function mostrarErroApiEm(elId, resp, mensagemPadrao) {
+  let mensagem = mensagemPadrao;
+  try {
+    const dados = await resp.json();
+    if (typeof dados.detail === "string") {
+      // erro "de negócio" que a gente mesmo lança no backend (HTTPException) — já vem pronto pro usuário
+      mensagem = dados.detail;
+    } else if (Array.isArray(dados.detail) && dados.detail.length) {
+      // erro 422 de validação automática do Pydantic (ex: campo com tipo errado) — pega a primeira mensagem
+      mensagem = dados.detail[0].msg || mensagemPadrao;
+    }
+  } catch (err) {
+    // resposta sem corpo JSON — mantém a mensagem padrão mesmo
+  }
+  mostrarErroEm(elId, mensagem);
 }
 
 // util local pra mostrar erro em qualquer .modal-error pelo id
@@ -625,7 +644,7 @@ async function salvarCliente() {
     const resp = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
     if (tratarRespostaAuth(resp)) return;
     if (!resp.ok) {
-      mostrarErroEm("c-error", "Não foi possível salvar o cliente.");
+      await mostrarErroApiEm("c-error", resp, "Não foi possível salvar o cliente.");
       return;
     }
     fecharModal("modal-cliente");
@@ -861,7 +880,7 @@ async function salvarMaterial() {
     const resp = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
     if (tratarRespostaAuth(resp)) return;
     if (!resp.ok) {
-      mostrarErroEm("m-error", "Não foi possível salvar o material.");
+      await mostrarErroApiEm("m-error", resp, "Não foi possível salvar o material.");
       return;
     }
     fecharModal("modal-material");
@@ -1181,7 +1200,7 @@ async function salvarServico() {
     const resp = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
     if (tratarRespostaAuth(resp)) return;
     if (!resp.ok) {
-      mostrarErroEm("s-error", "Não foi possível salvar o serviço.");
+      await mostrarErroApiEm("s-error", resp, "Não foi possível salvar o serviço.");
       return;
     }
     fecharModal("modal-servico");
@@ -1458,9 +1477,8 @@ function renderizarMesCalendario() {
       .map((s) => {
         const cliente = nomeClienteServico(s.client_id);
         const veiculo = nomeVeiculoServico(s.vehicle_id);
-        const tooltip = `${cliente} · ${veiculo} · ${s.title}`.replace(/'/g, "\\'");
         return `<div class="cal-avatar" style="background:${corPorId(s.client_id)}"
-                  onmouseenter="mostrarTooltipCal(event, '${tooltip}')"
+                  onmouseenter="mostrarTooltipCal(event, ${s.service_id})"
                   onmousemove="posicionarTooltipCal(event)"
                   onmouseleave="esconderTooltipCal()"
                   onclick="abrirDetalheServico(${s.service_id})">${iniciaisCliente(cliente)}</div>`;
@@ -1506,9 +1524,14 @@ function renderizarAnoCalendario() {
   cont.innerHTML = html;
 }
 
-function mostrarTooltipCal(evt, texto) {
+function mostrarTooltipCal(evt, serviceId) {
+  const s = todosServicos.find((s) => s.service_id === serviceId);
+  if (!s) return;
+  const cliente = nomeClienteServico(s.client_id);
+  const veiculo = nomeVeiculoServico(s.vehicle_id);
+
   const tip = document.getElementById("cal-tooltip");
-  tip.textContent = texto;
+  tip.textContent = `${cliente} · ${veiculo} · ${s.title}`;
   tip.style.display = "block";
   posicionarTooltipCal(evt);
 }
