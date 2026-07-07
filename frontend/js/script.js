@@ -232,4 +232,75 @@ function checarLogin() {
   }
 }
 
+// =====================================================
+// TEMA (claro/escuro) — só existe na navbar pública
+// sempre começa no escuro (não salva preferência entre recarregamentos)
+// =====================================================
+function alternarTema() {
+  document.body.classList.toggle("light-mode");
+  atualizarIconeTema();
+}
+
+function atualizarIconeTema() {
+  const icon = document.getElementById("theme-toggle-icon");
+  if (!icon) return; // esse botão só existe no index.html
+  const claro = document.body.classList.contains("light-mode");
+  icon.className = claro ? "ti ti-moon" : "ti ti-sun";
+}
+
+// =====================================================
+// SCROLLSPY — atualiza qual link do menu fica "ativo" conforme rola a página
+// =====================================================
+function inicializarScrollspy() {
+  const secoes = document.querySelectorAll("section[id]");
+  const links = document.querySelectorAll(".navbar-menu a");
+  if (!secoes.length || !links.length) return; // essa navbar só existe no index.html
+
+  function atualizarLinkAtivo() {
+    // soma a altura da navbar fixa (88px) + uma folga, pra trocar um pouco antes de a seção
+    // encostar no topo (senão o link troca só quando a seção já tá quase saindo de vista)
+    const posicaoAtual = window.scrollY + 88 + 40;
+    let idAtual = secoes[0].id;
+
+    secoes.forEach((secao) => {
+      if (secao.offsetTop <= posicaoAtual) {
+        idAtual = secao.id;
+      }
+    });
+
+    links.forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("href") === `#${idAtual}`);
+    });
+  }
+
+  window.addEventListener("scroll", atualizarLinkAtivo);
+  atualizarLinkAtivo(); // roda uma vez já na carga (ex: se a página abrir com scroll restaurado)
+}
+
+// =====================================================
+// ANIMAÇÃO DE ENTRADA AO ROLAR
+// toca só na primeira vez que cada seção aparece na tela; não repete
+// até a página ser recarregada (o "reset" natural é o F5, não precisa salvar em lugar nenhum)
+// =====================================================
+function inicializarAnimacaoEntrada() {
+  const alvos = document.querySelectorAll(".reveal-esquerda, .reveal-direita");
+  if (!alvos.length) return;
+
+  const observer = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.isIntersecting) {
+          entrada.target.classList.add("revelado");
+          observer.unobserve(entrada.target); // já revelou — não precisa mais ficar de olho nela
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  alvos.forEach((el) => observer.observe(el));
+}
+
 checarLogin();
+inicializarScrollspy();
+inicializarAnimacaoEntrada();

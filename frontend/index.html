@@ -20,14 +20,20 @@
       <li><a href="#contato">Contato</a></li>
     </ul>
 
-    <div class="navbar-auth" id="navbar-auth">
-      <button class="btn-auth" onclick="abrirModalLogin()">Entrar</button>
-      <button class="btn-auth solid" onclick="abrirModalCadastro()">Cadastrar</button>
-    </div>
+    <div class="navbar-right">
+      <button class="theme-toggle" id="theme-toggle" onclick="alternarTema()" title="Alternar tema">
+        <i class="ti ti-sun" id="theme-toggle-icon"></i>
+      </button>
 
-    <div class="navbar-user" id="navbar-user" onclick="irParaCentral()">
-      <i class="ti ti-user-circle"></i>
-      <span id="navbar-username">Admin</span>
+      <div class="navbar-auth" id="navbar-auth">
+        <button class="btn-auth" onclick="abrirModalLogin()">Entrar</button>
+        <button class="btn-auth solid" onclick="abrirModalCadastro()">Cadastrar</button>
+      </div>
+
+      <div class="navbar-user" id="navbar-user" onclick="irParaCentral()">
+        <i class="ti ti-user-circle"></i>
+        <span id="navbar-username">Admin</span>
+      </div>
     </div>
   </nav>
 
@@ -65,7 +71,7 @@
   </section>
 
   <!-- placeholder das próximas seções -->
-  <section id="sobre" class="about-section">
+  <section id="sobre" class="about-section reveal-esquerda">
     <div class="about-grid">
       <div class="about-text">
         <span class="services-eyebrow">私たちについて · Sobre</span>
@@ -105,7 +111,7 @@
       </div>
     </div>
   </section>
-  <section id="servicos" class="services-section">
+  <section id="servicos" class="services-section reveal-direita">
     <div class="services-header">
       <span class="services-eyebrow">サービス · Serviços</span>
       <h2>Nossos <span>Serviços</span></h2>
@@ -209,7 +215,7 @@
       <i class="ti ti-calendar-event"></i> Atendimento com hora marcada — buscamos e levamos o carro
     </div>
   </section>
-  <section id="contato" class="contact-section">
+  <section id="contato" class="contact-section reveal-esquerda">
     <div class="services-header">
       <span class="services-eyebrow">連絡 · Contato</span>
       <h2>Fale com a <span>Nippon Detail</span></h2>
