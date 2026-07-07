@@ -22,6 +22,9 @@ def create_vehicle(vehicle: SchemaVehicleCreate, db: Session = Depends(get_db), 
         plate = vehicle.plate,
         kind = vehicle.kind
     )
+    plate_query = select(Vehicle).where(Vehicle.plate == vehicle.plate)
+    if db.execute(plate_query).scalars().first() is not None:
+        raise HTTPException(status_code=409, detail="Já existe um veículo cadastrado com essa placa.")
     db.add(db_vehicle)
     db.commit()
     return {"message": "successful create_vehicle"}
@@ -31,7 +34,7 @@ def get_all_vehicles(db: Session = Depends(get_db), _=Depends(get_current_user))
     query = select(Vehicle)
     db_vehicles = db.execute(query).scalars().all()
     if not db_vehicles:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="veículo não encontrado.")
     return db_vehicles
 
 @router.get("/vehicle/get/id/{id}")
@@ -39,7 +42,7 @@ def get_vehicle_by_id(id: int, db: Session = Depends(get_db), _=Depends(get_curr
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="veículo não encontrado.")
     return db_vehicle
 
 @router.get("/vehicle/get/active/{bool}")
@@ -47,7 +50,7 @@ def get_active_vehicles(bool: int, db: Session = Depends(get_db), _=Depends(get_
     query = select(Vehicle).where(Vehicle.active==bool)
     db_vehicles = db.execute(query).scalars().all()
     if not db_vehicles:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="veículo não encontrado.")
     return db_vehicles
 
 @router.delete("/vehicle/delete/{id}", status_code=204)
@@ -55,7 +58,7 @@ def delete_vehicle(id: int, db: Session = Depends(get_db), _=Depends(get_current
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="veículo não encontrado.")
     db.delete(db_vehicle)
     db.commit()
     return {"message": "successful delete_vehicle"}
@@ -65,10 +68,13 @@ def update_vehicle(id: int, vehicle: SchemaVehicleUpdate, db: Session=Depends(ge
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="veículo não encontrado.")
     db_vehicle.model = vehicle.model
     db_vehicle.plate = vehicle.plate
     db_vehicle.kind = vehicle.kind
+    plate_query = select(Vehicle).where(Vehicle.plate == vehicle.plate, Vehicle.vehicle_id != id)
+    if db.execute(plate_query).scalars().first() is not None:
+        raise HTTPException(status_code=409, detail="Já existe outro veículo cadastrado com essa placa.")
     db.commit()
     return {"message": "successful update_vehicle"}
 
@@ -78,7 +84,7 @@ def update_active_vehicle(id: int, vehicle: SchemaVehicleActive, db: Session=Dep
     query = select(Vehicle).where(Vehicle.vehicle_id==id)
     db_vehicle = db.execute(query).scalars().first()
     if db_vehicle is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise HTTPException(status_code=404, detail="veículo não encontrado.")
     db_vehicle.active = vehicle.active
     if vehicle.active == False:
         service_query = select(Service).where(Service.client_id==id)
