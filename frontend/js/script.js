@@ -236,8 +236,22 @@ function checarLogin() {
 // TEMA (claro/escuro) — só existe na navbar pública
 // sempre começa no escuro (não salva preferência entre recarregamentos)
 // =====================================================
+// =====================================================
+// TEMA (claro/escuro) — persiste durante a aba aberta (sessionStorage),
+// mas nunca "pra sempre": fechar a aba/navegador reseta pro escuro de novo
+// =====================================================
 function alternarTema() {
   document.body.classList.toggle("light-mode");
+  const claro = document.body.classList.contains("light-mode");
+  sessionStorage.setItem("nippon_tema", claro ? "claro" : "escuro");
+  atualizarIconeTema();
+}
+
+function aplicarTemaSalvo() {
+  const tema = sessionStorage.getItem("nippon_tema");
+  if (tema === "claro") {
+    document.body.classList.add("light-mode");
+  }
   atualizarIconeTema();
 }
 
@@ -329,5 +343,6 @@ function inicializarAnimacaoEntrada() {
 }
 
 checarLogin();
+aplicarTemaSalvo();
 inicializarScrollspy();
 inicializarAnimacaoEntrada();
