@@ -89,7 +89,7 @@ img {
 }
 
 .hero-brand {
-  position: absolute;
+  position: fixed;
   top: -100px;
   left: -28px;
   width: 380px;
