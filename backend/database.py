@@ -1,7 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from dotenv import load_dotenv
 
-engine = create_engine("sqlite:///database.db")
+load_dotenv()
+engine = create_engine("DATABASE_URL")
 
 class Base(DeclarativeBase):
 	pass
