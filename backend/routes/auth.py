@@ -41,7 +41,7 @@ def auth_home():
     return {"message": "auth_home successful"}
 
 @router.post("/auth/register")
-def create_user(user: SchemaRegister, db: Session = Depends(get_db)):
+def create_user(user: SchemaRegister, db: Session = Depends(get_db), _=Depends(get_current_user)):
     query = select(User).where(User.username==user.username)
     db_user = db.execute(query).scalars().first()
     if db_user:
