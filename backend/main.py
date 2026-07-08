@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 #routers
 from routes.auth import router as auth_router
-from routes.user import router as user_router
 from routes.service import router as service_router
 from routes.material import router as material_router
 from routes.client import router as client_router
@@ -29,7 +28,6 @@ app.add_middleware(
 
 #include routers
 app.include_router(auth_router)
-app.include_router(user_router)
 app.include_router(service_router)
 app.include_router(material_router)
 app.include_router(client_router)

@@ -225,6 +225,26 @@ body.light-mode .navbar {
   color: var(--text-primario);
 }
 
+/* botão de orçamento — visualmente diferente dos links normais do menu (sem sublinhado, sólido) */
+.navbar-menu a.navbar-cta,
+.navbar-mobile-menu a.navbar-cta {
+  background: var(--vermelho);
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.navbar-menu a.navbar-cta::after {
+  display: none;
+}
+
+.navbar-menu a.navbar-cta:hover,
+.navbar-mobile-menu a.navbar-cta:hover {
+  background: var(--vermelho-hover);
+  color: #fff;
+}
+
 .navbar-auth {
   display: flex;
   align-items: center;

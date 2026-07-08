@@ -102,6 +102,101 @@ function mostrarErro(elId, mensagem) {
   el.classList.add("show");
 }
 
+// =====================================================
+// MÁSCARAS DE INPUT (mesmas do central.js, reaproveitadas aqui pro formulário público)
+// =====================================================
+function mascararCPF(valor) {
+  return valor
+    .replace(/\D/g, "")
+    .slice(0, 11)
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+}
+
+function mascararTelefone(valor) {
+  return valor
+    .replace(/\D/g, "")
+    .slice(0, 11)
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{5})(\d{1,4})$/, "$1-$2");
+}
+
+function mascararPlaca(valor) {
+  let v = valor.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
+  if (/^[A-Z]{3}[0-9]{4}$/.test(v)) {
+    return v.replace(/^([A-Z]{3})([0-9]{4})$/, "$1-$2");
+  }
+  return v;
+}
+
+// =====================================================
+// FORMULÁRIO DE ORÇAMENTO → WHATSAPP
+// não cadastra nada no banco — só monta a mensagem e abre o WhatsApp do Jeff
+// =====================================================
+const CATALOGO_SERVICOS_ORCAMENTO = [
+  "Lavagem Simples",
+  "Lavagem Detalhada",
+  "Polimento Técnico",
+  "Polimento Comercial",
+  "Vitrificação",
+  "Higienização Interna",
+  "Revitalização de Faróis",
+  "Lavagem de Motor",
+  "Insulfilm",
+  "Customizações",
+];
+
+function popularServicosOrcamento() {
+  const select = document.getElementById("orc-servico");
+  if (!select) return; // esse formulário só existe no index.html
+  CATALOGO_SERVICOS_ORCAMENTO.forEach((titulo) => {
+    const opt = document.createElement("option");
+    opt.value = titulo;
+    opt.textContent = titulo;
+    select.appendChild(opt);
+  });
+}
+
+function abrirModalOrcamento() {
+  document.getElementById("modal-orcamento").classList.add("show");
+  document.getElementById("orc-error").classList.remove("show");
+}
+
+function fecharModalOrcamento() {
+  document.getElementById("modal-orcamento").classList.remove("show");
+}
+
+function enviarOrcamentoWhatsapp() {
+  const nome = document.getElementById("orc-nome").value.trim();
+  const cpf = document.getElementById("orc-cpf").value.trim();
+  const telefone = document.getElementById("orc-telefone").value.trim();
+  const email = document.getElementById("orc-email").value.trim();
+  const endereco = document.getElementById("orc-endereco").value.trim();
+  const modelo = document.getElementById("orc-modelo").value.trim();
+  const placa = document.getElementById("orc-placa").value.trim();
+  const servico = document.getElementById("orc-servico").value;
+
+  if (!nome || !cpf || !telefone || !email || !endereco || !modelo || !placa || !servico) {
+    mostrarErro("orc-error", "Preencha todos os campos antes de continuar.");
+    return;
+  }
+
+  const mensagem =
+    `Olá! Gostaria de um orçamento na Nippon Detail.\n\n` +
+    `*Nome:* ${nome}\n` +
+    `*CPF:* ${cpf}\n` +
+    `*Telefone:* ${telefone}\n` +
+    `*E-mail:* ${email}\n` +
+    `*Endereço:* ${endereco}\n\n` +
+    `*Veículo:* ${modelo} — Placa ${placa}\n` +
+    `*Serviço desejado:* ${servico}`;
+
+  const url = `https://wa.me/5511996968893?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, "_blank");
+  fecharModalOrcamento();
+}
+
 // fecha modal clicando fora da caixa
 document.querySelectorAll(".modal-overlay").forEach((overlay) => {
   overlay.addEventListener("click", (e) => {
@@ -346,3 +441,4 @@ checarLogin();
 aplicarTemaSalvo();
 inicializarScrollspy();
 inicializarAnimacaoEntrada();
+popularServicosOrcamento();

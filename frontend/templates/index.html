@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nippon Detail — Estética Automotiva Premium</title>
-  <link rel="stylesheet" href="css/global.css" />
+  <link rel="icon" type="image/png" href="../img/logo-flutuante.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 </head>
 <body>
@@ -18,30 +22,50 @@
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#servicos">Serviços</a></li>
       <li><a href="#contato">Contato</a></li>
+      <li><a href="#" class="navbar-cta" onclick="abrirModalOrcamento(); return false;">Peça seu orçamento</a></li>
     </ul>
 
-    <div class="navbar-auth" id="navbar-auth">
-      <button class="btn-auth" onclick="abrirModalLogin()">Entrar</button>
-      <button class="btn-auth solid" onclick="abrirModalCadastro()">Cadastrar</button>
-    </div>
+    <div class="navbar-right">
+      <button class="menu-hamburguer" id="menu-hamburguer" onclick="alternarMenuMobile()" title="Menu">
+        <i class="ti ti-menu-2" id="menu-hamburguer-icon"></i>
+      </button>
 
-    <div class="navbar-user" id="navbar-user" onclick="irParaCentral()">
-      <i class="ti ti-user-circle"></i>
-      <span id="navbar-username">Admin</span>
+      <button class="theme-toggle" id="theme-toggle" onclick="alternarTema()" title="Alternar tema">
+        <i class="ti ti-sun" id="theme-toggle-icon"></i>
+      </button>
+
+      <div class="navbar-auth" id="navbar-auth">
+        <button class="btn-auth" onclick="abrirModalLogin()">Entrar</button>
+        <button class="btn-auth solid" onclick="abrirModalCadastro()">Cadastrar</button>
+      </div>
+
+      <div class="navbar-user" id="navbar-user" onclick="irParaCentral()">
+        <i class="ti ti-user-circle"></i>
+        <span id="navbar-username">Admin</span>
+      </div>
     </div>
   </nav>
 
+  <!-- MENU MOBILE (some/aparece com o hambúrguer, só existe visualmente abaixo de 900px) -->
+  <div class="navbar-mobile-menu" id="navbar-mobile-menu">
+    <a href="#home" onclick="fecharMenuMobile()">Home</a>
+    <a href="#sobre" onclick="fecharMenuMobile()">Sobre</a>
+    <a href="#servicos" onclick="fecharMenuMobile()">Serviços</a>
+    <a href="#contato" onclick="fecharMenuMobile()">Contato</a>
+    <a href="#" class="navbar-cta" onclick="fecharMenuMobile(); abrirModalOrcamento(); return false;">Peça seu orçamento</a>
+  </div>
+
   <!-- HERO / CARROSSEL -->
   <section class="hero" id="home">
-    <img src="img/logo-flutuante.png" alt="Nippon Detail" class="hero-brand" />
+    <img src="../img/logo-flutuante.png" alt="Nippon Detail" class="hero-brand" />
 
     <div class="hero-slides" id="hero-slides">
-      <div class="hero-slide active"><img src="img/carro-01.jpg" alt="Serviço Nippon Detail 1" /></div>
-      <div class="hero-slide"><img src="img/carro-02.jpg" alt="Serviço Nippon Detail 2" /></div>
-      <div class="hero-slide"><img src="img/carro-03.jpg" alt="Serviço Nippon Detail 3" /></div>
-      <div class="hero-slide"><img src="img/carro-04.jpg" alt="Serviço Nippon Detail 4" /></div>
-      <div class="hero-slide"><img src="img/carro-05.jpg" alt="Serviço Nippon Detail 5" /></div>
-      <div class="hero-slide"><img src="img/carro-06.jpg" alt="Serviço Nippon Detail 6" /></div>
+      <div class="hero-slide active"><img src="../img/carro-01.jpg" alt="Serviço Nippon Detail 1" /></div>
+      <div class="hero-slide"><img src="../img/carro-02.jpg" alt="Serviço Nippon Detail 2" /></div>
+      <div class="hero-slide"><img src="../img/carro-03.jpg" alt="Serviço Nippon Detail 3" /></div>
+      <div class="hero-slide"><img src="../img/carro-04.jpg" alt="Serviço Nippon Detail 4" /></div>
+      <div class="hero-slide"><img src="../img/carro-05.jpg" alt="Serviço Nippon Detail 5" /></div>
+      <div class="hero-slide"><img src="../img/carro-06.jpg" alt="Serviço Nippon Detail 6" /></div>
     </div>
 
     <div class="hero-overlay"></div>
@@ -52,7 +76,7 @@
     <div class="hero-content">
       <h1>Proteção e brilho<br>inigualável para <span>seu veículo</span></h1>
       <p>Proteção veicular, estética automotiva premium, PPF, vitrificação.</p>
-      <button class="hero-cta" onclick="document.getElementById('contato').scrollIntoView({behavior:'smooth'})">
+      <button class="hero-cta" onclick="abrirModalOrcamento()">
         Solicitar orçamento personalizado <i class="ti ti-arrow-right"></i>
       </button>
       <div class="hero-badges">
@@ -65,7 +89,7 @@
   </section>
 
   <!-- placeholder das próximas seções -->
-  <section id="sobre" class="about-section">
+  <section id="sobre" class="about-section reveal-esquerda">
     <div class="about-grid">
       <div class="about-text">
         <span class="services-eyebrow">私たちについて · Sobre</span>
@@ -105,7 +129,7 @@
       </div>
     </div>
   </section>
-  <section id="servicos" class="services-section">
+  <section id="servicos" class="services-section reveal-direita">
     <div class="services-header">
       <span class="services-eyebrow">サービス · Serviços</span>
       <h2>Nossos <span>Serviços</span></h2>
@@ -209,7 +233,7 @@
       <i class="ti ti-calendar-event"></i> Atendimento com hora marcada — buscamos e levamos o carro
     </div>
   </section>
-  <section id="contato" class="contact-section">
+  <section id="contato" class="contact-section reveal-esquerda">
     <div class="services-header">
       <span class="services-eyebrow">連絡 · Contato</span>
       <h2>Fale com a <span>Nippon Detail</span></h2>
@@ -301,6 +325,67 @@
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+  <!-- MODAL ORÇAMENTO PERSONALIZADO -->
+  <div class="modal-overlay" id="modal-orcamento">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Peça seu <span>orçamento</span></span>
+        <button class="modal-close" onclick="fecharModalOrcamento()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-error" id="orc-error"></div>
+
+        <div class="form-group">
+          <label class="form-label">Nome completo</label>
+          <input class="form-input" type="text" id="orc-nome" placeholder="Seu nome completo" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">CPF</label>
+            <input class="form-input" type="text" id="orc-cpf" placeholder="000.000.000-00" maxlength="14" oninput="this.value = mascararCPF(this.value)" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefone</label>
+            <input class="form-input" type="text" id="orc-telefone" placeholder="(11) 90000-0000" maxlength="15" oninput="this.value = mascararTelefone(this.value)" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">E-mail</label>
+          <input class="form-input" type="email" id="orc-email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Endereço</label>
+          <input class="form-input" type="text" id="orc-endereco" placeholder="Rua, número, bairro, cidade" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Modelo do veículo</label>
+            <input class="form-input" type="text" id="orc-modelo" placeholder="Ex: Onix" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Placa</label>
+            <input class="form-input" type="text" id="orc-placa" placeholder="ABC-1234" maxlength="8" oninput="this.value = mascararPlaca(this.value)" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Serviço desejado</label>
+          <select class="form-select" id="orc-servico">
+            <option value="">Selecione um serviço</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-red" style="justify-content:center;" onclick="enviarOrcamentoWhatsapp()">
+          <i class="ti ti-brand-whatsapp"></i> Enviar no WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
 </body>
 </html>
