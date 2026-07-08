@@ -1,12 +1,12 @@
 # Nippon Detail & Custom — Management System
 
-A management system built for an automotive detailing business, covering client and vehicle management, service tracking, inventory control, and financial overview.
+A management system built for an automotive detailing business, covering client and vehicle management, service tracking, inventory control, and a public-facing site with an instant-quote form.
 
 ---
 
 ## About
 
-Nippon Detail & Custom is a system built to manage the day-to-day operations of an automotive detailing shop. It allows registering clients and their vehicles, tracking services performed, managing materials and purchases, and monitoring the shop's financial overview through automatic cost calculations.
+Nippon Detail & Custom is a system built to manage the day-to-day operations of an automotive detailing shop. It allows registering clients and their vehicles, tracking services performed, managing materials and purchases, and viewing delivery deadlines on a calendar — plus a public site where prospective clients can request a quote pre-filled straight into WhatsApp.
 
 **Development notes:** the backend (models, schemas, routes, auth, database) was built entirely by me. The frontend (HTML/CSS/JS) was built with AI assistance (Claude), based on my own layout references, business requirements, and design decisions.
 
@@ -49,8 +49,9 @@ nippon-system/
 │   │   ├── script.js
 │   │   └── central.js
 │   ├── img/
-│   ├── index.html
-│   └── central.html
+│   └── templates/
+│       ├── index.html
+│       └── central.html
 ├── .gitignore
 └── README.md
 ```
@@ -73,13 +74,20 @@ venv\Scripts\activate  # Windows
 # Install dependencies
 pip install -r requirements.txt
 
+# Create a .env file with:
+#   DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/nippon_db
+#   SECRET_KEY=your_secret_key
+#   ALGORITHM=HS256
+
 # Run the server
 python -m uvicorn main:app --reload
 ```
 
 Access the API at: **http://localhost:8000**
 Interactive docs at: **http://localhost:8000/docs**
-Frontend: open `frontend/index.html` with Live Server on port **5500**
+Frontend: open `frontend/templates/index.html` with Live Server on port **5500**
+
+The database schema is created automatically on first run via SQLAlchemy's `Base.metadata.create_all()` — no manual migration needed.
 
 ---
 
@@ -88,7 +96,7 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 ### Auth
 | Method | Route | Description |
 |--------|-------|-------------|
-| POST | `/auth/register` | Register a new admin user |
+| POST | `/auth/register` | Register a new admin user. **Requires an existing valid token** — there's no public sign-up; the first account is seeded directly in the database. |
 | POST | `/auth/login` | Authenticate and receive JWT token (OAuth2 form-data) |
 
 ### Clients
@@ -139,6 +147,10 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | PATCH | `/material/update/expired/{id}` | Toggle material expired status |
 | DELETE | `/material/delete/{id}` | Delete a material |
 
+### Error Handling
+
+All routes return a `404` with a specific `detail` message when a referenced record (client, vehicle, service, material) doesn't exist. Creating or updating a `Client` (unique `cpf`/`email`) or a `Vehicle` (unique `plate`) returns a `409 Conflict` with a specific `detail` message if the value is already registered to another record, instead of a raw database error.
+
 ---
 
 ## Data Models
@@ -149,7 +161,8 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 | user_id | Integer | Primary key |
 | username | String | Unique username |
 | pass_hash | String | Hashed password (bcrypt) |
-| role | String | User role (`admin` or `user`) |
+
+There is no public registration flow — the first (and, for now, only) account is inserted directly into the database, with the password hashed via `passlib`'s bcrypt context beforehand. All authenticated requests share the same database; there's no per-user data isolation.
 
 ### Client
 | Field | Type | Description |
@@ -213,8 +226,8 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ## Frontend Overview
 
-- **Public site** (`index.html`): landing page with an image carousel, service showcase, and login/register modals (JWT stored in `localStorage`).
-- **Admin area** (`central.html`): single-page app with a sidebar (Dashboard, Clients, Vehicles, Services, Materials, Status) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, and dashboard stats.
+- **Public site** (`templates/index.html`): landing page with an image carousel (subtle Ken Burns zoom on the active slide), service showcase, and a scroll-spy navbar (active link updates automatically as you scroll, including a fix for the last section on the page). Includes a mobile hamburger menu below 900px, scroll-triggered reveal animations on each section, and a light/dark theme toggle (persisted for the duration of the browser tab via `sessionStorage`, always starts in dark mode on a fresh visit). A "Peça seu orçamento" button (in the navbar and in the hero) opens a form — name, CPF, phone, e-mail, address, vehicle, and desired service — that builds a pre-filled WhatsApp message and opens it in a new tab; nothing is saved to the database. There's no public sign-up anymore, only a login button for the shop's admin account.
+- **Admin area** (`templates/central.html`): single-page app with a sidebar (Dashboard, Calendar, Clients, Vehicles, Services, Materials, Status) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, dashboard stats, a monthly/yearly delivery calendar (color-coded per client, hover preview, click-through to the service), an initial loading overlay, and disabled/spinner state on save buttons to prevent duplicate submissions. Clicking the sidebar logo returns to the public site. Shares the same theme toggle as the public site.
 
 ---
 
@@ -236,4 +249,4 @@ Frontend: open `frontend/index.html` with Live Server on port **5500**
 
 ## Status
 
-🚧 In development — core backend and frontend MVP functional, including public site content (About/Contact); pending: light mode, delivery calendar view, deployment to production hosting.
+🚧 In development — core backend and frontend MVP functional, including public site content (About/Contact), light/dark theme, a delivery calendar view, a WhatsApp-based quote form, and a PostgreSQL database; pending: financial overview (revenue vs. expenses, with an auto-generated expense entry on material restock) and deployment to production hosting.
