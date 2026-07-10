@@ -8,6 +8,7 @@ from routes.service import router as service_router
 from routes.material import router as material_router
 from routes.client import router as client_router
 from routes.vehicle import router as vehicle_router
+from routes.expense import router as expense_router
 
 #models
 from models.user import  User
@@ -15,6 +16,8 @@ from models.service import Service
 from models.material import Material
 from models.client import Client
 from models.vehicle import Vehicle
+from models.expense import Expense
+
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
@@ -32,3 +35,4 @@ app.include_router(service_router)
 app.include_router(material_router)
 app.include_router(client_router)
 app.include_router(vehicle_router)
+app.include_router(expense_router)
