@@ -3,9 +3,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, or_
 from schemas.material import SchemaMaterialAvailable, SchemaMaterialCreate, SchemaMaterialExpired, SchemaMaterialResponse, SchemaMaterialUpdate, SchemaMaterialStock
 from models.material import Material
+from models.expense import Expense
 from database import get_db 
 from routes.auth import get_current_user
-
+from datetime import datetime
 router = APIRouter()
 
 @router.post("/material/register", status_code=201)
@@ -79,6 +80,7 @@ def update_material(id: int, material: SchemaMaterialUpdate, db: Session=Depends
     db_material.date_available = material.date_available
     db_material.expired = material.expired
     db_material.available = material.available
+
     db.commit()
     return {"message": "successful update_material"}
 
@@ -88,8 +90,18 @@ def update_stock_material(id: int, material: SchemaMaterialStock, db: Session=De
     db_material = db.execute(query).scalars().first()
     if db_material is None:
         raise HTTPException(status_code=404, detail="material não encontrado.")
+    db_material_past = db_material.quantity
+
     db_material.value = material.value
     db_material.quantity = material.quantity
+    if db_material_past < material.quantity:
+        db_expense = Expense(
+            name = db_material.name,
+            value = db_material.value,
+            date = datetime.now(),
+            origin = "automatic"
+        )
+        db.add(db_expense)
     db.commit()
     return {"message": "successful update_stock_material"}
 
