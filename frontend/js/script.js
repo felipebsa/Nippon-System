@@ -1,7 +1,7 @@
 // =====================================================
 // CONFIG
 // =====================================================
-const API_URL = "http://localhost:8000";
+const API_URL = "https://nippon-system-production.up.railway.app";
 const AUTOPLAY_MS = 5000;
 
 // =====================================================
