@@ -24,7 +24,7 @@ Base.metadata.create_all(bind=engine)
 #settings Cors
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://nippon-system.netlify.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
