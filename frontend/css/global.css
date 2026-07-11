@@ -174,8 +174,8 @@ body.light-mode .navbar {
 .hero-brand {
   position: fixed;
   top: -41px;
-  left: 8px;
-  width: 200px;
+  left: 14px;
+  width: 260px;
   height: auto;
   z-index: 250; /* maior que o z-index da navbar (200), fica por cima dela */
   pointer-events: none;
@@ -1106,9 +1106,12 @@ body.light-mode .navbar {
   .menu-hamburguer { display: flex; }
   .navbar { padding: 0 16px; }
 
-  /* logo flutuante: mesmo tamanho grande do desktop, já que a navbar
-     tem a mesma altura nos dois — não precisa de ajuste aqui */
-
+  /* logo flutuante: no celular ela fica um pouco menor e mais
+     encostada na borda esquerda do que no desktop */
+  .hero-brand {
+    left: 0px;
+    width: 200px;
+  }
 
   /* hero mais curto no celular — usa dvh (altura visível real, sem contar
      a barra do navegador) pra não cortar a foto de forma exagerada */
