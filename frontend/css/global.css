@@ -1106,22 +1106,18 @@ body.light-mode .navbar {
   .menu-hamburguer { display: flex; }
   .navbar { padding: 0 16px; }
 
-  /* logo flutuante: no celular ela fica um pouco menor e mais
-     encostada na borda esquerda do que no desktop */
+
   .hero-brand {
-    left: 0px;
+    left: -15px;
     width: 200px;
   }
 
-  /* hero mais curto no celular — usa dvh (altura visível real, sem contar
-     a barra do navegador) pra não cortar a foto de forma exagerada */
   .hero {
     height: 100svh;
     min-height: 560px;
   }
 
-  /* mostra mais do carro (menos "chão"/capô cortado) e desliga o zoom
-     ken-burns, que em telas estreitas exagera o corte da foto */
+
   .hero-slide img {
     object-position: center 38%;
   }
@@ -1130,7 +1126,7 @@ body.light-mode .navbar {
     animation: none;
   }
 
-  /* setas do carrossel removidas no celular — navegação fica pelas bolinhas */
+  
   .hero-arrow { display: none; }
 
   .about-grid { grid-template-columns: 1fr; }
