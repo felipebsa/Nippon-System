@@ -14,6 +14,21 @@ Nippon Detail & Custom is a system built to manage the day-to-day operations of 
 
 ---
 
+## Features
+
+- JWT Authentication
+- Client Management
+- Vehicle Management
+- Services
+- Material Inventory
+- Expense Tracking
+- Financial Dashboard
+- Delivery Calendar
+- WhatsApp Quote Form
+- Dark / Light Theme
+
+---
+
 ## Project Structure
 
 ```
