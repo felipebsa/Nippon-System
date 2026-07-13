@@ -173,11 +173,11 @@ body.light-mode .navbar {
 
 .hero-brand {
   position: fixed;
-  top: -100px;
-  left: -28px;
-  width: 380px;
+  top: -41px;
+  left: 14px;
+  width: 260px;
   height: auto;
-  z-index: 250; /* maior que o z-index da navbar (200), fica por cima dela */
+  z-index: 250; 
   pointer-events: none;
   filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5));
 }
@@ -1205,7 +1205,10 @@ body.light-mode .navbar {
   .navbar-menu { display: none; }
   .menu-hamburguer { display: flex; }
   .navbar { padding: 0 20px; }
-  .hero-brand { width: 100px; left: 14px; top: 6px; }
+  .hero-brand {
+    left: -20px;
+    width: 200px;
+  }
   .about-grid { grid-template-columns: 1fr; }
   .about-stats { flex-direction: row; }
 }
