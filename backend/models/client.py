@@ -9,7 +9,7 @@ class Client(Base):
 
     client_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column()
-    cpf: Mapped[str] = mapped_column(unique=True)
+    cpf: Mapped[Optional[str]] = mapped_column(unique=True)
     cep: Mapped[Optional[str]] = mapped_column()
     address: Mapped[Optional[str]] = mapped_column()
     email: Mapped[Optional[str]] = mapped_column(unique=True)

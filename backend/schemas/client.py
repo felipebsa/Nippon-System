@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 class SchemaClientCreate(BaseModel):
     name: str
-    cpf: str
+    cpf: Optional[str]
     cep: Optional[str]
     address: Optional[str]
     email: Optional[str]
