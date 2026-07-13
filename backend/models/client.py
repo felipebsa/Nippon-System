@@ -12,7 +12,7 @@ class Client(Base):
     cpf: Mapped[Optional[str]] = mapped_column()
     cep: Mapped[Optional[str]] = mapped_column()
     address: Mapped[Optional[str]] = mapped_column()
-    email: Mapped[Optional[str]] = mapped_column(unique=True)
+    email: Mapped[Optional[str]] = mapped_column()
     tel: Mapped[Optional[str]] = mapped_column()
     created: Mapped[datetime] = mapped_column(server_default=func.now())
     expired: Mapped[bool] = mapped_column(default=False)
