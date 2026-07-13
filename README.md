@@ -2,6 +2,8 @@
 
 A management system built for an automotive detailing business, covering client and vehicle management, service tracking, inventory control, financial overview, and a public-facing site with an instant-quote form.
 
+🔗 **Live:** [nippon-system.netlify.app](https://nippon-system.netlify.app/index.html)
+
 ---
 
 ## About
@@ -52,16 +54,26 @@ nippon-system/
 │   │   ├── script.js
 │   │   └── central.js
 │   ├── img/
-│   └── templates/
-│       ├── index.html
-│       └── central.html
+│   ├── index.html
+│   └── central.html
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Installation
+## Deployment
+
+The app runs split across two platforms, connected only through the API's public URL:
+
+- **Backend + PostgreSQL** → [Railway](https://railway.com) — the FastAPI service and the managed Postgres database live in the same Railway project. `DATABASE_URL` is linked as a variable reference to the Postgres service instead of a hardcoded string, so it always stays in sync if credentials rotate. Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT` (no `--reload` in production; `$PORT` is assigned by Railway, not fixed).
+- **Frontend (static)** → [Netlify](https://netlify.com) — `index.html` and `central.html` are plain static files, so there's no build step; Netlify just publishes the `frontend/` directory as-is on every push to `main`.
+- **CORS**: `allow_origins` in `main.py` is scoped to the Netlify domain instead of `"*"`, since the API is now reachable from the public internet.
+- The first (and only) admin account is seeded directly into the production database via `psql` — there's no public registration endpoint to bootstrap from (see [Auth](#auth) below).
+
+---
+
+## Installation (local development)
 
 **Requirements:** Python 3.8+, PostgreSQL
 
@@ -88,7 +100,7 @@ python -m uvicorn main:app --reload
 
 Access the API at: **http://localhost:8000**
 Interactive docs at: **http://localhost:8000/docs**
-Frontend: open `frontend/templates/index.html` with Live Server on port **5500**
+Frontend: open `frontend/index.html` with Live Server on port **5500** (remember to point `API_URL` in `js/script.js` and `js/central.js` back to `http://localhost:8000` when testing locally)
 
 The database schema is created automatically on first run via SQLAlchemy's `Base.metadata.create_all()` — no manual migration needed.
 
@@ -248,8 +260,8 @@ There is no public registration flow — the first (and, for now, only) account 
 
 ## Frontend Overview
 
-- **Public site** (`templates/index.html`): landing page with an image carousel (subtle Ken Burns zoom on the active slide), service showcase, and a scroll-spy navbar (active link updates automatically as you scroll, including a fix for the last section on the page). Includes a mobile hamburger menu below 900px, scroll-triggered reveal animations on each section, and a light/dark theme toggle (persisted for the duration of the browser tab via `sessionStorage`, always starts in dark mode on a fresh visit). A "Peça seu orçamento" button (in the navbar and in the hero) opens a form — name, CPF, phone, e-mail, address, vehicle, and desired service — that builds a pre-filled WhatsApp message and opens it in a new tab; nothing is saved to the database. There's no public sign-up anymore, only a login button for the shop's admin account.
-- **Admin area** (`templates/central.html`): single-page app with a sidebar (Dashboard, Calendar, Financial, Clients, Vehicles, Services, Materials, Status) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, dashboard stats, a monthly/yearly delivery calendar (color-coded per client, hover preview, click-through to the service), an initial loading overlay, and disabled/spinner state on save buttons to prevent duplicate submissions. Clicking the sidebar logo returns to the public site. Shares the same theme toggle as the public site.
+- **Public site** (`index.html`): landing page with an image carousel (subtle Ken Burns zoom on the active slide), service showcase, and a scroll-spy navbar (active link updates automatically as you scroll, including a fix for the last section on the page). Includes a mobile hamburger menu below 900px, scroll-triggered reveal animations on each section, and a light/dark theme toggle (persisted for the duration of the browser tab via `sessionStorage`, always starts in dark mode on a fresh visit). A "Peça seu orçamento" button (in the navbar and in the hero) opens a form — name, CPF, phone, e-mail, address, vehicle, and desired service — that builds a pre-filled WhatsApp message and opens it in a new tab; nothing is saved to the database. There's no public sign-up anymore, only a login button for the shop's admin account.
+- **Admin area** (`central.html`): single-page app with a sidebar (Dashboard, Clients, Vehicles, Services, Status, Materials, Financial, Calendar) — views are swapped via JavaScript without page reloads. Includes CRUD for all entities, an edit/delete selection mode, detail modals, dashboard stats, a monthly/yearly delivery calendar (color-coded per client, hover preview, click-through to the service), an initial loading overlay, and disabled/spinner state on save buttons to prevent duplicate submissions. Clicking the sidebar logo returns to the public site. Shares the same theme toggle as the public site.
 - **Financial view**: month/year selector with revenue, expense, and profit summary cards; a Chart.js bar chart comparing revenue vs. expenses over the last 6 months (styled from the active theme's CSS variables); rankings of the biggest expenses and the highest-earning service types (all-time, not scoped to the selected month); and full CRUD for expenses using the same card-grid pattern as the rest of the admin area. All calculations run client-side over data already fetched (no dedicated reporting endpoints) — a deliberate trade-off, fine at this shop's scale, though a larger system would push the aggregation into SQL instead.
 
 ---
@@ -269,10 +281,14 @@ There is no public registration flow — the first (and, for now, only) account 
 - Vanilla JavaScript (Fetch API)
 - [Chart.js](https://www.chartjs.org) (financial overview chart)
 
+**Hosting**
+- [Railway](https://railway.com) (backend + PostgreSQL)
+- [Netlify](https://netlify.com) (static frontend)
+
 ---
 
 ## Status
 
-✅ Feature-complete — client/vehicle/service/material management, delivery calendar, light/dark theme, a WhatsApp-based public quote form, and a full financial overview (manual + auto-generated expenses, revenue tracking, rankings) are all built and working on PostgreSQL.
+**Live and feature-complete.** Client/vehicle/service/material management, delivery calendar, light/dark theme, a WhatsApp-based public quote form, and a full financial overview (manual + auto-generated expenses, revenue tracking, rankings) are all built, deployed, and working on PostgreSQL in production.
 
-🚧 Pending: deployment to production hosting (Railway), Docker, and automated tests (pytest) — the remaining items from the original learning goals, not blockers for local use or demoing the app.
+🚧 Next up: Docker and automated tests (pytest) — the remaining items from the original learning goals, not blockers for using the live app.
