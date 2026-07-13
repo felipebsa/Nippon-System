@@ -584,6 +584,8 @@
   border: 1px solid var(--borda);
   border-radius: 10px;
   overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -701,6 +703,29 @@ tr:hover td {
   }
   .main {
     margin-left: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px;
+  }
+  .topbar {
+    padding: 0 14px;
+  }
+  .topbar .navbar-user span {
+    display: none;
+  }
+  .topbar-right .btn-outline span {
+    display: none;
+  }
+  .toolbar-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .toolbar-left,
+  .toolbar-right {
+    justify-content: center;
   }
 }
 

@@ -285,11 +285,11 @@
       <div class="modal-body">
         <div class="modal-error" id="v-error"></div>
         <div class="form-group">
-          <label class="form-label">Cliente</label>
+          <label class="form-label">Cliente <span class="obrigatorio">*</span></label>
           <select class="form-select" id="v-client-id"><option value="">Selecione um cliente</option></select>
         </div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Modelo</label><input class="form-input" type="text" id="v-model" placeholder="Ex: Onix" /></div>
+          <div class="form-group"><label class="form-label">Modelo <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="v-model" placeholder="Ex: Onix" /></div>
           <div class="form-group"><label class="form-label">Tipo</label>
             <select class="form-select" id="v-kind">
               <option value="Carro">Carro</option>
@@ -299,7 +299,8 @@
             </select>
           </div>
         </div>
-        <div class="form-group"><label class="form-label">Placa</label><input class="form-input" type="text" id="v-plate" placeholder="Ex: ABC-1234" maxlength="8" oninput="this.value = mascararPlaca(this.value)" /></div>
+        <div class="form-group"><label class="form-label">Placa <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="v-plate" placeholder="Ex: ABC-1234" maxlength="8" oninput="this.value = mascararPlaca(this.value)" /></div>
+        <p class="form-legenda"><span class="obrigatorio">*</span> campo obrigatório</p>
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-veiculo')">Cancelar</button>
@@ -319,7 +320,7 @@
         <div class="modal-error" id="ev-error"></div>
         <input type="hidden" id="ev-id" />
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Modelo</label><input class="form-input" type="text" id="ev-model" /></div>
+          <div class="form-group"><label class="form-label">Modelo <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="ev-model" /></div>
           <div class="form-group"><label class="form-label">Tipo</label>
             <select class="form-select" id="ev-kind">
               <option value="Carro">Carro</option>
@@ -329,7 +330,8 @@
             </select>
           </div>
         </div>
-        <div class="form-group"><label class="form-label">Placa</label><input class="form-input" type="text" id="ev-plate" maxlength="8" oninput="this.value = mascararPlaca(this.value)" /></div>
+        <div class="form-group"><label class="form-label">Placa <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="ev-plate" maxlength="8" oninput="this.value = mascararPlaca(this.value)" /></div>
+        <p class="form-legenda"><span class="obrigatorio">*</span> campo obrigatório</p>
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-editar-veiculo')">Cancelar</button>
@@ -349,15 +351,16 @@
         <div class="modal-error" id="c-error"></div>
         <input type="hidden" id="c-id" />
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Nome</label><input class="form-input" type="text" id="c-name" placeholder="Nome completo" /></div>
-          <div class="form-group"><label class="form-label">CPF</label><input class="form-input" type="text" id="c-cpf" placeholder="000.000.000-00" maxlength="14" oninput="this.value = mascararCPF(this.value)" /></div>
+          <div class="form-group"><label class="form-label">Nome <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="c-name" placeholder="Nome completo" /></div>
+          <div class="form-group"><label class="form-label">CPF</label><input class="form-input" type="text" id="c-cpf" placeholder="000.000.000-00 (opcional)" maxlength="14" oninput="this.value = mascararCPF(this.value)" /></div>
         </div>
         <div class="form-group"><label class="form-label">Endereço</label><input class="form-input" type="text" id="c-address" placeholder="Rua, número, bairro" /></div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">CEP</label><input class="form-input" type="text" id="c-cep" placeholder="00000-000" maxlength="9" oninput="this.value = mascararCEP(this.value)" /></div>
           <div class="form-group"><label class="form-label">Telefone</label><input class="form-input" type="text" id="c-tel" placeholder="(11) 90000-0000" maxlength="15" oninput="this.value = mascararTelefone(this.value)" /></div>
         </div>
-        <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" id="c-email" placeholder="cliente@email.com" /></div>
+        <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" id="c-email" placeholder="cliente@email.com (opcional)" /></div>
+        <p class="form-legenda"><span class="obrigatorio">*</span> campo obrigatório</p>
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-cliente')">Cancelar</button>
@@ -377,7 +380,7 @@
         <div class="modal-error" id="s-error"></div>
         <input type="hidden" id="s-id" />
         <div class="form-group">
-          <label class="form-label">Veículo</label>
+          <label class="form-label">Veículo <span class="obrigatorio">*</span></label>
           <select class="form-select" id="s-vehicle-id"><option value="">Selecione um veículo</option></select>
         </div>
         <div class="form-group">
@@ -388,12 +391,13 @@
           <span class="form-hint" id="s-preco-hint"></span>
         </div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Título</label><input class="form-input" type="text" id="s-title" placeholder="Ex: Vitrificação completa" /></div>
-          <div class="form-group"><label class="form-label">Tipo</label><input class="form-input" type="text" id="s-kind" placeholder="Ex: Estética" /></div>
+          <div class="form-group"><label class="form-label">Título <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="s-title" placeholder="Ex: Vitrificação completa" /></div>
+          <div class="form-group"><label class="form-label">Tipo <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="s-kind" placeholder="Ex: Estética" /></div>
         </div>
-        <div class="form-group"><label class="form-label">Valor (R$)</label><input class="form-input" type="number" step="0.01" id="s-value" placeholder="0.00" /></div>
-        <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-textarea" id="s-desc" placeholder="Descreva o serviço..."></textarea></div>
+        <div class="form-group"><label class="form-label">Valor (R$) <span class="obrigatorio">*</span></label><input class="form-input" type="number" step="0.01" id="s-value" placeholder="0.00" /></div>
+        <div class="form-group"><label class="form-label">Descrição <span class="obrigatorio">*</span></label><textarea class="form-textarea" id="s-desc" placeholder="Descreva o serviço..."></textarea></div>
         <div class="form-group"><label class="form-label">Data prevista de entrega</label><input class="form-input" type="date" id="s-date" /></div>
+        <p class="form-legenda"><span class="obrigatorio">*</span> campo obrigatório</p>
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-servico')">Cancelar</button>
@@ -413,14 +417,15 @@
         <div class="modal-error" id="m-error"></div>
         <input type="hidden" id="m-id" />
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Nome</label><input class="form-input" type="text" id="m-name" placeholder="Ex: Cera de carnaúba" /></div>
-          <div class="form-group"><label class="form-label">Marca</label><input class="form-input" type="text" id="m-mark" placeholder="Ex: Meguiar's" /></div>
+          <div class="form-group"><label class="form-label">Nome <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="m-name" placeholder="Ex: Cera de carnaúba" /></div>
+          <div class="form-group"><label class="form-label">Marca <span class="obrigatorio">*</span></label><input class="form-input" type="text" id="m-mark" placeholder="Ex: Meguiar's" /></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Quantidade em estoque</label><input class="form-input" type="number" id="m-quantity" placeholder="0" /></div>
-          <div class="form-group"><label class="form-label">Valor unitário (R$)</label><input class="form-input" type="number" step="0.01" id="m-value" placeholder="0.00" /></div>
+          <div class="form-group"><label class="form-label">Quantidade em estoque <span class="obrigatorio">*</span></label><input class="form-input" type="number" id="m-quantity" placeholder="0" /></div>
+          <div class="form-group"><label class="form-label">Valor unitário (R$) <span class="obrigatorio">*</span></label><input class="form-input" type="number" step="0.01" id="m-value" placeholder="0.00" /></div>
         </div>
         <div class="form-group"><label class="form-label">Validade</label><input class="form-input" type="date" id="m-date-available" /></div>
+        <p class="form-legenda"><span class="obrigatorio">*</span> campo obrigatório</p>
       </div>
       <div class="modal-footer" style="flex-direction: row; justify-content: flex-end;">
         <button class="btn-outline" onclick="fecharModal('modal-material')">Cancelar</button>

@@ -669,12 +669,19 @@ async function salvarCliente() {
   const tel = document.getElementById("c-tel").value.trim();
   const email = document.getElementById("c-email").value.trim();
 
-  if (!name || !cpf) {
-    mostrarErroEm("c-error", "Nome e CPF são obrigatórios.");
+  if (!name) {
+    mostrarErroEm("c-error", "Nome é obrigatório.");
     return;
   }
 
-  const payload = { name, cpf, address, cep, tel, email };
+  const payload = {
+    name,
+    cpf: cpf || null,
+    address,
+    cep,
+    tel,
+    email: email || null,
+  };
   const editando = !!id;
   const url = editando ? `${API_URL}/client/update/${id}` : `${API_URL}/client/register`;
   const method = editando ? "PUT" : "POST";

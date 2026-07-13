@@ -69,9 +69,6 @@
 
     <div class="hero-overlay"></div>
 
-    <button class="hero-arrow prev" onclick="carrosselAnterior()"><i class="ti ti-chevron-left"></i></button>
-    <button class="hero-arrow next" onclick="carrosselProximo()"><i class="ti ti-chevron-right"></i></button>
-
     <div class="hero-content">
       <h1>Proteção e brilho<br>inigualável para <span>seu veículo</span></h1>
       <p>Proteção veicular, estética automotiva premium, PPF, vitrificação.</p>
@@ -118,7 +115,7 @@
 
       <div class="about-stats">
         <div class="about-stat-card">
-          <div class="about-stat-num" id="about-contador-carros">500+</div>
+          <div class="about-stat-num" id="about-contador-carros">150+</div>
           <div class="about-stat-label">Carros atendidos</div>
         </div>
         <div class="about-stat-card">
@@ -289,59 +286,96 @@
     </div>
   </div>
 
+  <!-- MODAL ESCOLHA DO TIPO DE ORÇAMENTO -->
+  <div class="modal-overlay" id="modal-orcamento-escolha">
+    <div class="modal modal-escolha">
+      <div class="modal-header">
+        <span class="modal-title">Como podemos <span>te ajudar?</span></span>
+        <button class="modal-close" onclick="fecharModal('modal-orcamento-escolha')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="escolha-cards">
+          <div class="escolha-card" onclick="escolherTipoOrcamento('levar')">
+            <div class="escolha-card-icon"><i class="ti ti-car"></i></div>
+            <h4>Vou levar meu carro</h4>
+            <p>Você mesmo leva o veículo até a Nippon Detail</p>
+          </div>
+          <div class="escolha-card" onclick="escolherTipoOrcamento('buscar')">
+            <div class="escolha-card-icon"><i class="ti ti-truck-delivery"></i></div>
+            <h4>Quero que busquem meu carro</h4>
+            <p>Sistema de leva e traz até o seu endereço</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="flex-direction: row; justify-content: space-between;">
+        <button class="btn-outline" onclick="fecharModal('modal-orcamento-escolha')">Voltar</button>
+        <a href="https://wa.me/5511996968893" target="_blank" class="btn-whatsapp-direto">
+          <i class="ti ti-brand-whatsapp"></i> Chamar no WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL ORÇAMENTO PERSONALIZADO -->
   <div class="modal-overlay" id="modal-orcamento">
     <div class="modal">
       <div class="modal-header">
-        <span class="modal-title">Peça seu <span>orçamento</span></span>
+        <span class="modal-title" id="orc-modal-titulo">Peça seu <span>orçamento</span></span>
         <button class="modal-close" onclick="fecharModalOrcamento()"><i class="ti ti-x"></i></button>
       </div>
       <div class="modal-body">
         <div class="modal-error" id="orc-error"></div>
 
         <div class="form-group">
-          <label class="form-label">Nome completo</label>
+          <label class="form-label">Nome completo <span class="obrigatorio">*</span></label>
           <input class="form-input" type="text" id="orc-nome" placeholder="Seu nome completo" />
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">CPF</label>
-            <input class="form-input" type="text" id="orc-cpf" placeholder="000.000.000-00" maxlength="14" oninput="this.value = mascararCPF(this.value)" />
+            <input class="form-input" type="text" id="orc-cpf" placeholder="000.000.000-00 (opcional)" maxlength="14" oninput="this.value = mascararCPF(this.value)" />
           </div>
           <div class="form-group">
-            <label class="form-label">Telefone</label>
+            <label class="form-label">Telefone <span class="obrigatorio">*</span></label>
             <input class="form-input" type="text" id="orc-telefone" placeholder="(11) 90000-0000" maxlength="15" oninput="this.value = mascararTelefone(this.value)" />
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">E-mail</label>
-          <input class="form-input" type="email" id="orc-email" placeholder="seu@email.com" />
+          <input class="form-input" type="email" id="orc-email" placeholder="seu@email.com (opcional)" />
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Endereço</label>
+        <div class="form-group" id="orc-endereco-group">
+          <label class="form-label">Endereço <span class="obrigatorio">*</span></label>
           <input class="form-input" type="text" id="orc-endereco" placeholder="Rua, número, bairro, cidade" />
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Modelo do veículo</label>
+            <label class="form-label">Modelo do veículo <span class="obrigatorio">*</span></label>
             <input class="form-input" type="text" id="orc-modelo" placeholder="Ex: Onix" />
           </div>
           <div class="form-group">
-            <label class="form-label">Placa</label>
+            <label class="form-label">Placa <span class="obrigatorio">*</span></label>
             <input class="form-input" type="text" id="orc-placa" placeholder="ABC-1234" maxlength="8" oninput="this.value = mascararPlaca(this.value)" />
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Serviço desejado</label>
-          <select class="form-select" id="orc-servico">
-            <option value="">Selecione um serviço</option>
-          </select>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Serviço desejado <span class="obrigatorio">*</span></label>
+            <select class="form-select" id="orc-servico">
+              <option value="">Selecione um serviço</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data e horário <span class="obrigatorio">*</span></label>
+            <input class="form-input" type="datetime-local" id="orc-horario" />
+          </div>
         </div>
+
+        <p class="form-legenda"><span class="obrigatorio">*</span> campo obrigatório</p>
       </div>
       <div class="modal-footer">
         <button class="btn-red" style="justify-content:center;" onclick="enviarOrcamentoWhatsapp()">

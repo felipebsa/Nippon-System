@@ -33,18 +33,6 @@ function atualizarSlides() {
   });
 }
 
-function carrosselProximo() {
-  indiceAtual = (indiceAtual + 1) % totalSlides; // volta pro 0 depois do último
-  atualizarSlides();
-  resetarAutoplay();
-}
-
-function carrosselAnterior() {
-  indiceAtual = (indiceAtual - 1 + totalSlides) % totalSlides; // evita número negativo
-  atualizarSlides();
-  resetarAutoplay();
-}
-
 function irParaSlide(i) {
   indiceAtual = i;
   atualizarSlides();
@@ -146,9 +134,34 @@ function popularServicosOrcamento() {
   });
 }
 
+// fecha modal genérico por id (usado pela tela de escolha do orçamento)
+function fecharModal(id) {
+  document.getElementById(id).classList.remove("show");
+}
+
+let tipoOrcamentoAtual = "levar"; // "levar" | "buscar"
+
 function abrirModalOrcamento() {
-  document.getElementById("modal-orcamento").classList.add("show");
+  document.getElementById("modal-orcamento-escolha").classList.add("show");
+}
+
+function escolherTipoOrcamento(tipo) {
+  tipoOrcamentoAtual = tipo;
+  document.getElementById("modal-orcamento-escolha").classList.remove("show");
+
+  const grupoEndereco = document.getElementById("orc-endereco-group");
+  const titulo = document.getElementById("orc-modal-titulo");
+
+  if (tipo === "buscar") {
+    grupoEndereco.style.display = "";
+    titulo.innerHTML = 'Buscar meu <span>carro</span>';
+  } else {
+    grupoEndereco.style.display = "none";
+    titulo.innerHTML = 'Vou levar meu <span>carro</span>';
+  }
+
   document.getElementById("orc-error").classList.remove("show");
+  document.getElementById("modal-orcamento").classList.add("show");
 }
 
 function fecharModalOrcamento() {
@@ -164,21 +177,41 @@ function enviarOrcamentoWhatsapp() {
   const modelo = document.getElementById("orc-modelo").value.trim();
   const placa = document.getElementById("orc-placa").value.trim();
   const servico = document.getElementById("orc-servico").value;
+  const horarioRaw = document.getElementById("orc-horario").value;
 
-  if (!nome || !cpf || !telefone || !email || !endereco || !modelo || !placa || !servico) {
-    mostrarErro("orc-error", "Preencha todos os campos antes de continuar.");
+  const obrigatorios = [nome, telefone, modelo, placa, servico, horarioRaw];
+  if (tipoOrcamentoAtual === "buscar") obrigatorios.push(endereco);
+
+  if (obrigatorios.some((campo) => !campo)) {
+    mostrarErro("orc-error", "Preencha todos os campos obrigatórios (*) antes de continuar.");
     return;
   }
 
-  const mensagem =
-    `Olá! Gostaria de um orçamento na Nippon Detail.\n\n` +
+  const horarioFmt = new Date(horarioRaw).toLocaleString("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+
+  const introducao =
+    tipoOrcamentoAtual === "buscar"
+      ? "Olá! Gostaria de um orçamento e preciso que busquem meu carro."
+      : "Olá! Gostaria de um orçamento na Nippon Detail. Vou levar meu carro até a loja.";
+
+  let mensagem =
+    `${introducao}\n\n` +
     `*Nome:* ${nome}\n` +
-    `*CPF:* ${cpf}\n` +
+    (cpf ? `*CPF:* ${cpf}\n` : "") +
     `*Telefone:* ${telefone}\n` +
-    `*E-mail:* ${email}\n` +
-    `*Endereço:* ${endereco}\n\n` +
-    `*Veículo:* ${modelo} — Placa ${placa}\n` +
-    `*Serviço desejado:* ${servico}`;
+    (email ? `*E-mail:* ${email}\n` : "");
+
+  if (tipoOrcamentoAtual === "buscar") {
+    mensagem += `*Endereço:* ${endereco}\n`;
+  }
+
+  mensagem +=
+    `\n*Veículo:* ${modelo} — Placa ${placa}\n` +
+    `*Serviço desejado:* ${servico}\n` +
+    `*Data/horário:* ${horarioFmt}`;
 
   const url = `https://wa.me/5511996968893?text=${encodeURIComponent(mensagem)}`;
   window.open(url, "_blank");
