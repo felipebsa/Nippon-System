@@ -2,7 +2,7 @@
 
 A management system built for an automotive detailing business, covering client and vehicle management, service tracking, inventory control, financial overview, and a public-facing site with an instant-quote form.
 
-🔗 **Live:** [nippon-detail.netlify.app](https://nippon-detail.netlify.app/index.html)
+🔗 **Site:** [nippon-detail.netlify.app](https://nippon-detail.netlify.app/index.html)
 
 ---
 
