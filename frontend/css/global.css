@@ -48,6 +48,10 @@
 
   --raio:               16px;
   --raio-lg:            22px;
+
+  /* cursor vermelho com brilho (img/cursor*.svg) — o ponto quente fica na ponta da seta / do dedo */
+  --cursor:             url('../img/cursor.svg') 8 6, auto;
+  --cursor-link:        url('../img/cursor-pointer.svg') 13 6, pointer;
 }
 
 /* aliases antigos → camadas novas.
@@ -124,6 +128,56 @@ body {
 img {
   max-width: 100%;
   display: block;
+}
+
+/* cursor vermelho */
+html {
+  cursor: var(--cursor);
+}
+
+a,
+button,
+label,
+select,
+summary,
+[onclick] {
+  cursor: var(--cursor-link);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea {
+  cursor: text;
+}
+
+/* luz bem suave seguindo o mouse (o elemento é criado pelo efeitos.js) */
+.cursor-luz {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(
+    160px circle at var(--cx, -999px) var(--cy, -999px),
+    rgba(var(--vermelho-rgb), 0.07),
+    transparent 70%
+  );
+}
+
+.cursor-luz.ligada {
+  opacity: 1;
+}
+
+body.light-mode .cursor-luz {
+  background: radial-gradient(
+    160px circle at var(--cx, -999px) var(--cy, -999px),
+    rgba(var(--vermelho-rgb), 0.08),
+    transparent 70%
+  );
+}
+
+@media (hover: none) {
+  .cursor-luz { display: none; }
 }
 
 ::selection {
@@ -357,7 +411,7 @@ body.pagina-rolada .hero-brand {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   font-size: 18px;
   flex-shrink: 0;
   transition: border-color 0.2s, color 0.2s, background-color 0.2s, transform 0.3s;
@@ -379,7 +433,7 @@ body.pagina-rolada .hero-brand {
   border-radius: 11px;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   font-size: 20px;
   flex-shrink: 0;
   transition: border-color 0.2s;
@@ -452,7 +506,7 @@ body.pagina-rolada .hero-brand {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   transition: all 0.2s;
 }
 
@@ -489,7 +543,7 @@ body.pagina-rolada .hero-brand {
   color: var(--text-primario);
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   padding: 8px 14px;
   border-radius: 11px;
   border: 1px solid var(--borda-forte);
@@ -683,7 +737,7 @@ body.pagina-rolada .hero-brand {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -727,7 +781,7 @@ body.pagina-rolada .hero-brand {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -780,6 +834,7 @@ body.pagina-rolada .hero-brand {
 
 /* indicadores (bolinhas) */
 .hero-dots {
+  display: none !important;
   position: absolute;
   bottom: 30px;
   left: 50%;
@@ -794,7 +849,7 @@ body.pagina-rolada .hero-brand {
   height: 9px;
   border-radius: 50%;
   background: rgba(255,255,255,0.35);
-  cursor: pointer;
+  cursor: var(--cursor-link);
   transition: all 0.25s;
 }
 
@@ -822,7 +877,7 @@ body.light-mode .hero-dot:not(.active) {
   font-family: var(--fonte-corpo);
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -848,7 +903,7 @@ body.light-mode .hero-dot:not(.active) {
   font-family: var(--fonte-corpo);
   font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -897,7 +952,7 @@ body.light-mode .hero-dot:not(.active) {
   border-radius: var(--raio);
   padding: 26px 20px;
   text-align: center;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   transition: border-color 0.25s, transform 0.25s, background 0.25s, box-shadow 0.25s;
 }
 
@@ -1022,7 +1077,7 @@ body.light-mode .modal {
   background: none;
   border: 1px solid transparent;
   border-radius: 9px;
-  cursor: pointer;
+  cursor: var(--cursor-link);
   font-size: 20px;
   color: var(--text-secundario);
   line-height: 1;
@@ -1057,7 +1112,7 @@ body.light-mode .modal {
   color: var(--vermelho-claro);
   font-weight: 600;
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--cursor-link);
 }
 
 .modal-switch a:hover {
@@ -1159,7 +1214,7 @@ body.light-mode .modal-error {
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 38px;
-  cursor: pointer;
+  cursor: var(--cursor-link);
 }
 
 .form-select:hover {
@@ -1189,14 +1244,14 @@ body.light-mode .modal-error {
   gap: 8px;
   font-size: 13.5px;
   color: var(--text-primario);
-  cursor: pointer;
+  cursor: var(--cursor-link);
 }
 
 .radio-option input[type="radio"] {
   accent-color: var(--vermelho);
   width: 16px;
   height: 16px;
-  cursor: pointer;
+  cursor: var(--cursor-link);
 }
 
 /* ===========================

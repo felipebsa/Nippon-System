@@ -38,6 +38,23 @@
   }
 
   // =====================================================
+  // LUZ DO MOUSE — brilho vermelho bem suave seguindo o cursor
+  // =====================================================
+  if (temMouse) {
+    const luz = document.createElement("div");
+    luz.className = "cursor-luz";
+    luz.setAttribute("aria-hidden", "true");
+    document.body.appendChild(luz);
+
+    window.addEventListener("pointermove", (e) => {
+      luz.style.setProperty("--cx", `${e.clientX}px`);
+      luz.style.setProperty("--cy", `${e.clientY}px`);
+      luz.classList.add("ligada");
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", () => luz.classList.remove("ligada"));
+  }
+
+  // =====================================================
   // VÍDEO DO HERO — só no celular
   // o src só é colocado em tela pequena, pra não baixar o vídeo no computador.
   // as fotos do carrossel só somem quando o vídeo de fato começa a tocar.
