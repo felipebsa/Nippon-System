@@ -1,9 +1,5 @@
-/* ===========================
-   VARIÁVEIS — TEMA ESCURO (padrão)
-   organizadas em camadas: fundo → superfície → superfície elevada.
-   os nomes antigos (--fundo-card, --borda, --vermelho...) continuam existindo
-   porque o central.js lê alguns deles via getComputedStyle pro gráfico.
-=========================== */
+/* Variáveis - tema escuro (padrão)
+   não renomear --vermelho, --borda, --text-secundario e --verde-ok: o gráfico do central.js lê elas */
 :root {
   /* camadas */
   --fundo:              #070707;
@@ -17,7 +13,7 @@
   /* marca */
   --vermelho:           #c8050f;
   --vermelho-hover:     #dd0a16;
-  --vermelho-claro:     #f0303a;  /* vermelho de texto/destaque — legível sobre o fundo */
+  --vermelho-claro:     #f0303a;  /* texto em vermelho */
   --vermelho-rgb:       200, 5, 15;
   --vermelho-fundo:     rgba(200, 5, 15, 0.12);
   --vermelho-brilho:    rgba(200, 5, 15, 0.45);
@@ -49,14 +45,12 @@
   --raio:               16px;
   --raio-lg:            22px;
 
-  /* cursor vermelho com brilho (img/cursor*.svg) — o ponto quente fica na ponta da seta / do dedo */
+  /* cursor vermelho (img/cursor*.svg) */
   --cursor:             url('../img/cursor.svg') 8 6, auto;
   --cursor-link:        url('../img/cursor-pointer.svg') 13 6, pointer;
 }
 
-/* aliases antigos → camadas novas.
-   ficam no body (e não no :root) pra acompanhar o body.light-mode —
-   var() é resolvido no elemento onde a variável é declarada */
+/* nomes antigos apontando pras camadas novas - ficam no body pra funcionar com o .light-mode */
 body {
   --fundo-pagina:       var(--fundo);
   --fundo-card:         var(--superficie);
@@ -65,10 +59,7 @@ body {
   --borda-hover:        var(--vermelho);
 }
 
-/* ===========================
-   VARIÁVEIS — TEMA CLARO
-   (ativado via classe .light-mode no <body>)
-=========================== */
+/* Variáveis - tema claro (body.light-mode) */
 body.light-mode {
   color-scheme: light;
 
@@ -102,9 +93,7 @@ body.light-mode {
   --sombra-card:        0 14px 34px -18px rgba(0, 0, 0, 0.22);
 }
 
-/* ===========================
-   RESET & BASE
-=========================== */
+/* Reset & base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -209,7 +198,7 @@ textarea {
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
-/* estado de foco visível (acessibilidade) — combina com a marca em vez do azul padrão do navegador */
+/* foco visível em vermelho */
 :focus-visible {
   outline: 2px solid var(--vermelho-claro);
   outline-offset: 3px;
@@ -235,11 +224,7 @@ textarea {
   background: var(--vermelho-hover);
 }
 
-/* ===========================
-   NAVBAR PÚBLICA
-   pílula flutuante: transparente sobre o hero, vira vidro ao rolar
-   (.navbar--rolada é colocada pelo efeitos.js)
-=========================== */
+/* Navbar pública (.navbar--rolada vem do efeitos.js) */
 .navbar {
   position: fixed;
   top: 14px;
@@ -300,8 +285,7 @@ body.light-mode .navbar.navbar--rolada {
   transition: width 0.35s ease, top 0.35s ease, left 0.35s ease;
 }
 
-/* ao rolar, o logo encolhe e encaixa dentro da pílula da navbar
-   (a imagem tem bastante margem transparente, por isso os valores negativos) */
+/* logo menor dentro da navbar ao rolar (a imagem tem muita margem transparente, por isso os negativos) */
 body.pagina-rolada .hero-brand {
   width: 150px;
   top: -31px;
@@ -362,7 +346,7 @@ body.pagina-rolada .hero-brand {
   background: rgba(0, 0, 0, 0.25);
 }
 
-/* botão de orçamento — visualmente diferente dos links normais do menu */
+/* botão de orçamento do menu */
 .navbar-menu a.navbar-cta,
 .navbar-mobile-menu a.navbar-cta,
 .navbar:not(.navbar--rolada) .navbar-menu a.navbar-cta {
@@ -559,11 +543,7 @@ body.pagina-rolada .hero-brand {
   color: var(--vermelho-claro);
 }
 
-/* ===========================
-   HERO / CARROSSEL
-   no computador: fotos do carrossel. no celular: vídeo vertical
-   (o efeitos.js só carrega o vídeo em tela pequena e coloca .com-video no .hero)
-=========================== */
+/* Hero / carrossel (no celular entra o vídeo, ver efeitos.js) */
 .hero {
   position: relative;
   height: 100vh;
@@ -858,14 +838,12 @@ body.pagina-rolada .hero-brand {
   box-shadow: 0 0 12px rgba(240, 48, 58, 0.6);
 }
 
-/* no claro a parte de baixo do hero já é o fundo claro — bolinhas inativas escuras */
+/* tema claro: bolinhas escuras */
 body.light-mode .hero-dot:not(.active) {
   background: rgba(0, 0, 0, 0.25);
 }
 
-/* ===========================
-   BOTÕES GERAIS
-=========================== */
+/* Botões gerais */
 .btn-red {
   background: linear-gradient(135deg, var(--vermelho-hover), var(--vermelho));
   color: #fff;
@@ -913,9 +891,7 @@ body.light-mode .hero-dot:not(.active) {
   background: var(--vermelho-fundo);
 }
 
-/* ===========================
-   MODAL (login / orçamento)
-=========================== */
+/* Modal (login / orçamento) */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -1136,9 +1112,7 @@ body.light-mode .modal-error {
   display: block;
 }
 
-/* ===========================
-   FORMULÁRIO
-=========================== */
+/* Formulário */
 .form-group {
   margin-bottom: 16px;
 }
@@ -1252,9 +1226,7 @@ body.light-mode .modal-error {
   cursor: var(--cursor-link);
 }
 
-/* ===========================
-   CABEÇALHO DAS SEÇÕES (subtítulo japonês + título)
-=========================== */
+/* Cabeçalho das seções (subtítulo japonês + título) */
 .services-header {
   text-align: center;
   margin-bottom: 52px;
@@ -1301,9 +1273,7 @@ body.light-mode .services-eyebrow {
   color: var(--vermelho-claro);
 }
 
-/* ===========================
-   SEÇÃO SERVIÇOS
-=========================== */
+/* Seção serviços */
 .services-section {
   padding: 110px 32px;
   max-width: 1240px;
@@ -1479,9 +1449,7 @@ body.light-mode .services-eyebrow {
   font-size: 16px;
 }
 
-/* ===========================
-   SEÇÃO SOBRE
-=========================== */
+/* Seção sobre */
 .about-section {
   padding: 120px 32px 110px;
   max-width: 1240px;
@@ -1660,10 +1628,7 @@ body.light-mode .about-stat-num {
   margin-top: 8px;
 }
 
-/* ===========================
-   SEÇÃO CONTATO
-   bloco grande com brilho vermelho embaixo
-=========================== */
+/* Seção contato */
 .contact-section {
   position: relative;
   isolation: isolate;
@@ -1781,9 +1746,7 @@ body.light-mode .contact-section {
   overflow-wrap: anywhere;
 }
 
-/* ===========================
-   RESPONSIVO
-=========================== */
+/* Responsivo */
 @media (max-width: 1080px) {
   .navbar-menu { display: none; }
   .menu-hamburguer { display: flex; }
@@ -1885,10 +1848,7 @@ body.light-mode .contact-section {
   .services-grid { grid-template-columns: 1fr; }
 }
 
-/* ===========================
-   ANIMAÇÃO DE ENTRADA AO ROLAR
-   (aplicada via JS na primeira vez que a seção entra na tela)
-=========================== */
+/* Animação de entrada ao rolar (classe .revelado vem do script.js) */
 .reveal-esquerda,
 .reveal-direita {
   opacity: 0;
@@ -1909,8 +1869,7 @@ body.light-mode .contact-section {
   transform: translateX(0) scale(1);
 }
 
-/* no celular a entrada é vertical: o deslocamento lateral alargava a viewport
-   (e a navbar fixa junto) antes de a seção aparecer */
+/* no celular a entrada é vertical, a lateral alargava a página */
 @media (max-width: 767px) {
   .reveal-esquerda,
   .reveal-direita {
@@ -1922,9 +1881,7 @@ body.light-mode .contact-section {
   }
 }
 
-/* ===========================
-   EFEITOS SÓ COM MOUSE / MOVIMENTO REDUZIDO
-=========================== */
+/* Efeitos só com mouse / movimento reduzido */
 @media (hover: none) {
   .service-card::before,
   .service-card::after,

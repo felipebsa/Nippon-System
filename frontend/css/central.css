@@ -1,6 +1,4 @@
-/* ===========================
-   BODY DA ÁREA ADMIN
-=========================== */
+/* Body da área admin */
 .central-body {
   display: flex;
   min-height: 100vh;
@@ -19,9 +17,7 @@
   background: radial-gradient(circle, rgba(var(--vermelho-rgb), 0.07), transparent 65%);
 }
 
-/* ===========================
-   SIDEBAR
-=========================== */
+/* Sidebar */
 .sidebar {
   width: 236px;
   min-height: 100vh;
@@ -152,7 +148,7 @@ body.light-mode .sidebar {
   background: var(--superficie-elevada);
 }
 
-/* botão de menu e fundo escuro — só aparecem no celular */
+/* botão de menu e fundo escuro (só no celular) */
 .sidebar-toggle {
   display: none;
   background: transparent;
@@ -177,9 +173,7 @@ body.light-mode .sidebar {
   display: none;
 }
 
-/* ===========================
-   ÁREA PRINCIPAL
-=========================== */
+/* Área principal */
 .main {
   position: relative;
   z-index: 1;
@@ -246,9 +240,7 @@ body.light-mode .topbar {
   flex: 1;
 }
 
-/* ===========================
-   SISTEMA DE VIEWS (troca sem reload)
-=========================== */
+/* Sistema de views (troca sem reload) */
 .view {
   display: none;
 }
@@ -272,9 +264,7 @@ body.light-mode .topbar {
   border-radius: var(--raio);
 }
 
-/* ===========================
-   TOOLBAR DAS VIEWS
-=========================== */
+/* Toolbar das views */
 .view-toolbar {
   display: flex;
   justify-content: space-between;
@@ -309,9 +299,7 @@ body.light-mode .topbar {
   box-shadow: 0 0 0 3px var(--vermelho-fundo);
 }
 
-/* ===========================
-   TOOLBAR UNIFICADA (busca+filtros à esquerda, ícones de modo à direita)
-=========================== */
+/* Toolbar unificada (busca+filtros à esquerda, ícones de modo à direita) */
 .toolbar-row {
   display: flex;
   justify-content: space-between;
@@ -401,9 +389,7 @@ body.light-mode .warning-bar.del {
   display: flex;
 }
 
-/* ===========================
-   FILTROS
-=========================== */
+/* Filtros */
 .filters-bar {
   display: flex;
   gap: 8px;
@@ -453,9 +439,7 @@ body.light-mode .warning-bar.del {
   border-color: var(--vermelho);
 }
 
-/* ===========================
-   GRID DE CARDS
-=========================== */
+/* Grid de cards */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -564,7 +548,7 @@ body.light-mode .warning-bar.del {
   align-items: center;
 }
 
-/* card "adicionar novo" — quadrado tracejado com + */
+/* card "adicionar novo" */
 .item-card.add-new {
   display: flex;
   align-items: center;
@@ -588,9 +572,7 @@ body.light-mode .warning-bar.del {
   font-size: 26px;
 }
 
-/* ===========================
-   BADGE STATUS — chips coloridos
-=========================== */
+/* Badge status - chips coloridos */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -637,9 +619,7 @@ body.light-mode .badge::before {
   box-shadow: none;
 }
 
-/* ===========================
-   MODAL CONFIRMAÇÃO
-=========================== */
+/* Modal confirmação */
 .confirm-overlay {
   display: none;
   position: fixed;
@@ -731,9 +711,7 @@ body.light-mode .confirm-box {
   box-shadow: 0 8px 22px -10px var(--vermelho-brilho);
 }
 
-/* ===========================
-   STATS (dashboard)
-=========================== */
+/* Stats (dashboard) */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -826,9 +804,7 @@ body.light-mode .stat-val.red {
   box-shadow: 0 0 10px var(--vermelho-brilho);
 }
 
-/* ===========================
-   TABELA (Status)
-=========================== */
+/* Tabela (Status) */
 .table-wrap {
   background: var(--fundo-card);
   border: 1px solid var(--borda-suave);
@@ -871,9 +847,7 @@ tr:hover td {
   background: var(--vermelho-fundo);
 }
 
-/* ===========================
-   MODAL DE DETALHES
-=========================== */
+/* Modal de detalhes */
 .detalhe-linha {
   display: flex;
   justify-content: space-between;
@@ -956,9 +930,7 @@ tr:hover td {
   background: rgba(46, 204, 113, 0.12) !important;
 }
 
-/* ===========================
-   CALENDÁRIO
-=========================== */
+/* Calendário */
 .cal-toolbar {
   display: flex;
   align-items: center;
@@ -1178,9 +1150,7 @@ tr:hover td {
   box-shadow: 0 0 8px -1px var(--vermelho-brilho);
 }
 
-/* ===========================
-   OVERLAY DE CARREGAMENTO INICIAL
-=========================== */
+/* Overlay de carregamento inicial */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -1207,9 +1177,7 @@ tr:hover td {
   box-shadow: 0 0 24px -6px var(--vermelho-brilho);
 }
 
-/* ===========================
-   BOTÃO "SALVANDO..." (ícone girando + travado)
-=========================== */
+/* Botão "salvando..." (ícone girando + travado) */
 .btn-red:disabled {
   opacity: 0.7;
   cursor: not-allowed;
@@ -1224,9 +1192,7 @@ tr:hover td {
   to { transform: rotate(360deg); }
 }
 
-/* ===========================
-   FINANCEIRO
-=========================== */
+/* Financeiro */
 .fin-chart-wrap {
   background: var(--fundo-card);
   border: 1px solid var(--borda-suave);
@@ -1306,9 +1272,7 @@ tr:hover td {
   flex-shrink: 0;
 }
 
-/* ===========================
-   RESPONSIVO
-=========================== */
+/* Responsivo */
 @media (max-width: 1100px) {
   .cal-grid-ano {
     grid-template-columns: repeat(3, 1fr);
@@ -1358,7 +1322,7 @@ tr:hover td {
   }
 }
 
-/* celular: sidebar vira menu recolhível (abre pelo botão da topbar — efeitos.js) */
+/* celular: sidebar recolhível (efeitos.js) */
 @media (max-width: 767px) {
   .sidebar {
     width: 264px;

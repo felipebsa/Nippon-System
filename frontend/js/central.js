@@ -1,6 +1,4 @@
-// =====================================================
-// PROTEÇÃO DE ROTA — só admin logado acessa essa página
-// =====================================================
+// Proteção de rota - só admin logado acessa essa página
 (function checarAcesso() {
   const token = localStorage.getItem("nippon_token");
   if (!token) {
@@ -11,9 +9,7 @@
 document.getElementById("admin-username").textContent =
   localStorage.getItem("nippon_username") || "Admin";
 
-// =====================================================
-// HELPER: headers com token de autenticação
-// =====================================================
+// Headers com token de autenticação
 function authHeaders(comJson = true) {
   const headers = { Authorization: `Bearer ${localStorage.getItem("nippon_token")}` };
   if (comJson) headers["Content-Type"] = "application/json";
@@ -31,9 +27,7 @@ function tratarRespostaAuth(resp) {
   return false;
 }
 
-// =====================================================
-// MODAIS — genérico (abrir/fechar por id)
-// =====================================================
+// Modais - genérico (abrir/fechar por id)
 function abrirModal(id) {
   document.getElementById(id).classList.add("show");
 }
@@ -41,9 +35,7 @@ function fecharModal(id) {
   document.getElementById(id).classList.remove("show");
 }
 
-// =====================================================
-// CONFIRMAÇÃO GENÉRICA (usada por apagar em qualquer tela)
-// =====================================================
+// Confirmação genérica (usada por apagar em qualquer tela)
 let acaoConfirmadaCallback = null;
 
 function pedirConfirmacao(titulo, callback) {
@@ -62,9 +54,7 @@ function confirmarAcaoAtual() {
   fecharConfirm();
 }
 
-// =====================================================
-// VEÍCULOS
-// =====================================================
+// Veículos
 let todosVeiculos = [];
 let todosClientes = [];
 let modoVeiculo = "none"; // "none" | "edit" | "del"
@@ -413,14 +403,14 @@ async function mostrarErroApiEm(elId, resp, mensagemPadrao) {
   try {
     const dados = await resp.json();
     if (typeof dados.detail === "string") {
-      // erro "de negócio" que a gente mesmo lança no backend (HTTPException) — já vem pronto pro usuário
+      // erro "de negócio" que a gente mesmo lança no backend (HTTPException) - já vem pronto pro usuário
       mensagem = dados.detail;
     } else if (Array.isArray(dados.detail) && dados.detail.length) {
-      // erro 422 de validação automática do Pydantic (ex: campo com tipo errado) — pega a primeira mensagem
+      // erro 422 de validação automática do Pydantic (ex: campo com tipo errado) - pega a primeira mensagem
       mensagem = dados.detail[0].msg || mensagemPadrao;
     }
   } catch (err) {
-    // resposta sem corpo JSON — mantém a mensagem padrão mesmo
+    // Resposta sem corpo json - mantém a mensagem padrão mesmo
   }
   mostrarErroEm(elId, mensagem);
 }
@@ -432,9 +422,7 @@ function mostrarErroEm(elId, mensagem) {
   el.classList.add("show");
 }
 
-// =====================================================
-// MÁSCARAS DE INPUT (CPF, telefone)
-// =====================================================
+// Máscaras de input (CPF, telefone)
 function mascararCPF(valor) {
   return valor
     .replace(/\D/g, "") // remove tudo que não é dígito
@@ -462,7 +450,7 @@ function mascararCEP(valor) {
 function mascararPlaca(valor) {
   // remove tudo que não é letra/número e força maiúsculo
   let v = valor.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
-  // formato antigo (3 letras + 4 números) ganha hífen: ABC-1234
+  // Formato antigo (3 letras + 4 números) ganha hífen: abc-1234
   if (/^[A-Z]{3}[0-9]{4}$/.test(v)) {
     return v.replace(/^([A-Z]{3})([0-9]{4})$/, "$1-$2");
   }
@@ -470,9 +458,7 @@ function mascararPlaca(valor) {
   return v;
 }
 
-// =====================================================
-// CLIENTES
-// =====================================================
+// Clientes
 let todosClientesLista = [];
 let modoCliente = "none";
 let filtroAtivoCliente = "todos"; // todos | ativos | inativos (expired)
@@ -715,9 +701,7 @@ async function apagarCliente(id) {
   }
 }
 
-// =====================================================
-// MATERIAIS
-// =====================================================
+// Materiais
 let todosMateriais = [];
 let modoMaterial = "none";
 let filtroDisponivelMaterial = "todos"; // todos | disponiveis | indisponiveis
@@ -913,7 +897,7 @@ async function salvarMaterial() {
   let payload;
 
   if (editando) {
-    // "expired" e "available" são obrigatórios no schema — preserva os valores atuais do material
+    // "expired" e "available" são obrigatórios no schema - preserva os valores atuais do material
     const materialAtual = todosMateriais.find((m) => m.material_id === Number(id));
     payload = {
       name,
@@ -960,9 +944,7 @@ async function apagarMaterial(id) {
   }
 }
 
-// =====================================================
-// CATÁLOGO DE SERVIÇOS PRÉ-DEFINIDOS (Nippon Detail)
-// =====================================================
+// Catálogo de serviços pré-definidos (Nippon Detail)
 const CATALOGO_SERVICOS = [
   { titulo: "Lavagem Simples", kind: "Estética", preco: "A partir de R$ 60,00", valor: 60 },
   { titulo: "Lavagem Detalhada", kind: "Estética", preco: "A partir de R$ 150,00", valor: 150 },
@@ -1004,9 +986,7 @@ function aplicarCatalogoServico() {
   hint.textContent = `Preço de referência: ${servico.preco}`;
 }
 
-// =====================================================
-// SERVIÇOS
-// =====================================================
+// Serviços
 let todosServicos = [];
 let modoServico = "none";
 let filtroStatusServico = "todos"; // todos | pendente | concluido
@@ -1018,7 +998,7 @@ async function carregarServicos() {
     const dados = await resp.json();
 
     // sua API às vezes devolve a lista pura, às vezes embrulhada em { message: [...] }
-    // — aqui a gente aceita os dois formatos
+    // - aqui a gente aceita os dois formatos
     if (resp.ok) {
       todosServicos = Array.isArray(dados) ? dados : dados.message || [];
     } else {
@@ -1246,7 +1226,7 @@ async function salvarServico() {
   if (editando) {
     payload = { title, kind, desc, date_release, value };
   } else {
-    // na criação, o backend exige também o client_id — pegamos do veículo selecionado
+    // na criação, o backend exige também o client_id - pegamos do veículo selecionado
     const selectEl = document.getElementById("s-vehicle-id");
     const client_id = selectEl.options[selectEl.selectedIndex].dataset.clientId;
     payload = { vehicle_id: Number(vehicle_id), client_id: Number(client_id), title, kind, desc, date_release, value };
@@ -1284,9 +1264,7 @@ async function apagarServico(id) {
   }
 }
 
-// =====================================================
-// STATUS (tabela geral de serviços)
-// =====================================================
+// Status (tabela geral de serviços)
 let filtroStatusTabela = "todos";
 
 function setFiltroStatusTabela(valor, botao) {
@@ -1326,9 +1304,7 @@ function renderizarTabelaStatus() {
   document.getElementById("status-tabela-body").innerHTML = linhas;
 }
 
-// =====================================================
-// DASHBOARD
-// =====================================================
+// Dashboard
 function atualizarStatsDashboard() {
   document.getElementById("stat-clientes").textContent = todosClientesLista.length || 0;
   document.getElementById("stat-veiculos").textContent = todosVeiculos.length || 0;
@@ -1349,9 +1325,7 @@ function renderizarProximosDashboard() {
     '<p class="view-placeholder">Nenhum serviço pendente com data definida.</p>';
 }
 
-// =====================================================
-// util genérica: aplica classe visual do modo em qualquer grid
-// =====================================================
+// Util genérica: aplica classe visual do modo em qualquer grid
 function aplicarClasseModoGenerico(gridId, modo) {
   document.querySelectorAll(`#${gridId} .item-card:not(.add-new)`).forEach((card) => {
     card.classList.remove("modo-edit", "modo-del");
@@ -1360,9 +1334,7 @@ function aplicarClasseModoGenerico(gridId, modo) {
   });
 }
 
-// =====================================================
-// CARREGAMENTO INICIAL — busca tudo assim que a página abre
-// =====================================================
+// Carregamento inicial - busca tudo assim que a página abre
 async function carregarTudo() {
   popularCatalogoServico();
   await carregarClientes();
@@ -1378,14 +1350,12 @@ function esconderLoadingInicial() {
   if (overlay) overlay.classList.add("escondido");
 }
 
-// =====================================================
-// CALENDÁRIO
-// =====================================================
+// Calendário
 const NOMES_MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 const NOMES_MESES_ABREV = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
-// paleta de cores pros avatares — cada cliente sempre cai na mesma cor (hash pelo id)
+// paleta de cores pros avatares - cada cliente sempre cai na mesma cor (hash pelo id)
 const PALETA_AVATAR = ["#4f8ef7", "#f78e4f", "#37b893", "#a05ff2", "#f24f8e", "#e0b400", "#4fc7f7", "#f2734f", "#7a5ff2", "#5ff2b0"];
 
 let calMesAtual = new Date().getMonth(); // 0-11
@@ -1408,7 +1378,7 @@ function nomeClienteServico(client_id) {
   return c ? c.name : `Cliente #${client_id}`;
 }
 
-// agrupa os serviços pendentes por dia, chave "YYYY-MM-DD" — mesmo formato que sai do date_release
+// Agrupa os serviços pendentes por dia, chave "yyyy-mm-dd" - mesmo formato que sai do date_release
 function agruparServicosPorDia() {
   const grupos = {};
   todosServicos
@@ -1618,11 +1588,9 @@ function esconderTooltipCal() {
 carregarTudo();
 inicializarCalendario();
 inicializarFinanceiro();
-// =====================================================
-// FINANCEIRO
-// =====================================================
+// Financeiro
 
-// busca as despesas na API — sempre garante array, mesmo com lista vazia (404)
+// busca as despesas na API - sempre garante array, mesmo com lista vazia (404)
 async function carregarDespesas() {
   try {
     const resp = await fetch(`${API_URL}/expense/get/all`, { headers: authHeaders(false) });
@@ -1640,7 +1608,7 @@ function formatarMoeda(v) {
   return Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-// pega a data "efetiva" de receita de um serviço concluído — usa date_release,
+// pega a data "efetiva" de receita de um serviço concluído - usa date_release,
 // e cai pra created se não tiver (decisão que já tomamos juntos)
 function dataEfetivaServico(s) {
   return (s.date_release || s.created).substring(0, 10);
@@ -1683,7 +1651,7 @@ function ultimosNMeses(ano, mes, n) {
   return meses;
 }
 
-// lê uma variável CSS do tema atual — assim o gráfico usa as cores certas no claro e no escuro
+// lê uma variável CSS do tema atual - assim o gráfico usa as cores certas no claro e no escuro
 function corVar(nome) {
   return getComputedStyle(document.body).getPropertyValue(nome).trim();
 }

@@ -1,14 +1,8 @@
-// =====================================================
-// EFEITOS VISUAIS — só aparência, nenhuma lógica do site depende daqui.
-// usado no index.html e no central.html (cada bloco checa se o elemento existe).
-// fica dentro de uma IIFE pra não colidir com as variáveis globais do script.js/central.js
-// =====================================================
+// efeitos visuais do site e do painel (cada parte checa se o elemento existe na página)
 (function () {
   const reduzirMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  // =====================================================
-  // NAVBAR — transparente no topo, vidro ao rolar
-  // =====================================================
+  // navbar vira vidro ao rolar
   const navbar = document.querySelector(".navbar");
 
   function atualizarNavbar() {
@@ -22,11 +16,7 @@
     atualizarNavbar();
   }
 
-  // =====================================================
-  // BRILHO QUE SEGUE O MOUSE NOS CARDS
-  // atualiza --mx/--my, que o CSS usa no radial-gradient do ::before/::after.
-  // delegação no document: pega também os cards que o central.js cria depois
-  // =====================================================
+  // brilho dos cards seguindo o mouse (no document pra pegar os cards criados depois)
   const temMouse = window.matchMedia("(hover: hover)").matches;
   const CARDS_COM_BRILHO = ".service-card, .contact-card, .escolha-card, .item-card";
 
@@ -40,9 +30,7 @@
     }, { passive: true });
   }
 
-  // =====================================================
-  // LUZ DO MOUSE — brilho vermelho bem suave seguindo o cursor
-  // =====================================================
+  // luz do mouse
   if (temMouse) {
     const luz = document.createElement("div");
     luz.className = "cursor-luz";
@@ -57,11 +45,7 @@
     document.documentElement.addEventListener("pointerleave", () => luz.classList.remove("ligada"));
   }
 
-  // =====================================================
-  // VÍDEO DO HERO — só no celular
-  // o src só é colocado em tela pequena, pra não baixar o vídeo no computador.
-  // as fotos do carrossel só somem quando o vídeo de fato começa a tocar.
-  // =====================================================
+  // vídeo do hero só no celular; as fotos somem quando ele começa a tocar
   const hero = document.querySelector(".hero");
   const video = document.getElementById("hero-video");
   const telaPequena = window.matchMedia("(max-width: 767px)");
@@ -74,7 +58,7 @@
       video.addEventListener("playing", () => hero.classList.add("com-video"), { once: true });
       video.src = video.dataset.src;
     }
-    // play() pode ser bloqueado (modo economia de dados etc.) — aí só continuam as fotos
+    // se o navegador bloquear o autoplay, ficam as fotos
     const tentativa = video.play();
     if (tentativa) tentativa.catch(() => {});
   }
@@ -82,14 +66,8 @@
   prepararVideo();
   telaPequena.addEventListener("change", prepararVideo);
 
-  // =====================================================
-  // MODAIS — não fechar quando o clique começa dentro e termina fora
-  // o script.js fecha o modal no "click" quando o alvo é o fundo (.modal-overlay).
-  // se a pessoa aperta o mouse dentro do modal (ex: selecionando texto num campo)
-  // e solta no fundo, o navegador dispara o click no fundo e o modal fechava.
-  // aqui anotamos onde o mouse foi apertado e solto; se não foram os dois no fundo,
-  // o click é barrado na fase de captura, antes de chegar no listener do script.js.
-  // =====================================================
+  // modal só fecha pelo fundo se o mouse foi apertado E solto no fundo
+  // (apertar dentro e soltar fora disparava o click no fundo e fechava)
   let apertouNoFundo = false;
   let soltouNoFundo = false;
   const ehFundoDoModal = (el) => el && el.classList && el.classList.contains("modal-overlay");
@@ -102,9 +80,7 @@
     }
   }, true);
 
-  // =====================================================
-  // PAINEL — sidebar recolhível no celular
-  // =====================================================
+  // painel: sidebar recolhível no celular
   const btnSidebar = document.getElementById("sidebar-toggle");
   const fundoSidebar = document.getElementById("sidebar-fundo");
 
@@ -121,7 +97,7 @@
       definirSidebar(!document.body.classList.contains("sidebar-aberta"));
     });
     if (fundoSidebar) fundoSidebar.addEventListener("click", () => definirSidebar(false));
-    // ao escolher uma tela no menu, fecha (o onclick do link continua fazendo a troca de view)
+    // fecha ao escolher uma tela
     document.querySelectorAll(".sidebar .nav-item").forEach((item) => {
       item.addEventListener("click", () => definirSidebar(false));
     });
@@ -131,15 +107,12 @@
     telaPequena.addEventListener("change", () => definirSidebar(false));
   }
 
-  // =====================================================
-  // PAINEL — redesenha o gráfico quando o tema muda,
-  // pra ele pegar as cores do tema novo (as cores vêm das variáveis CSS)
-  // =====================================================
+  // painel: redesenha o gráfico quando troca o tema, pra pegar as cores novas
   if (typeof renderizarGraficoFinanceiro === "function") {
     let claroAntes = document.body.classList.contains("light-mode");
     new MutationObserver(() => {
       const claro = document.body.classList.contains("light-mode");
-      if (claro === claroAntes) return; // outra classe mudou (ex: sidebar abrindo)
+      if (claro === claroAntes) return;
       claroAntes = claro;
       if (typeof graficoFinanceiro !== "undefined" && graficoFinanceiro) renderizarGraficoFinanceiro();
     }).observe(document.body, { attributes: true, attributeFilter: ["class"] });

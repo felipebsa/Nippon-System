@@ -1,12 +1,8 @@
-// =====================================================
-// CONFIG
-// =====================================================
+// Config
 const API_URL = "https://nippon-detail-production.up.railway.app";
 const AUTOPLAY_MS = 5000;
 
-// =====================================================
-// CARROSSEL
-// =====================================================
+// Carrossel
 const slides = document.querySelectorAll(".hero-slide");
 const dotsContainer = document.getElementById("hero-dots");
 const totalSlides = slides.length;
@@ -56,9 +52,7 @@ if (dotsContainer) {
   iniciarAutoplay();
 }
 
-// =====================================================
-// MODAIS — LOGIN / CADASTRO
-// =====================================================
+// Modais - login / cadastro
 function abrirModalLogin() {
   document.getElementById("modal-login").classList.add("show");
   limparErros();
@@ -78,9 +72,7 @@ function mostrarErro(elId, mensagem) {
   el.classList.add("show");
 }
 
-// =====================================================
-// MÁSCARAS DE INPUT (mesmas do central.js, reaproveitadas aqui pro formulário público)
-// =====================================================
+// Máscaras de input (mesmas do central.js, reaproveitadas aqui pro formulário público)
 function mascararCPF(valor) {
   return valor
     .replace(/\D/g, "")
@@ -106,10 +98,8 @@ function mascararPlaca(valor) {
   return v;
 }
 
-// =====================================================
-// FORMULÁRIO DE ORÇAMENTO → WHATSAPP
-// não cadastra nada no banco — só monta a mensagem e abre o WhatsApp do Jeff
-// =====================================================
+// Formulário de orçamento → WhatsApp
+// não cadastra nada no banco - só monta a mensagem e abre o WhatsApp do Jeff
 const CATALOGO_SERVICOS_ORCAMENTO = [
   "Lavagem Simples",
   "Lavagem Detalhada",
@@ -225,9 +215,7 @@ document.querySelectorAll(".modal-overlay").forEach((overlay) => {
   });
 });
 
-// =====================================================
-// AUTENTICAÇÃO
-// =====================================================
+// Autenticação
 // lógica de login extraída em função própria pra ficar fácil de reutilizar se precisar
 async function realizarLogin(username, password, elIdErro) {
   const corpo = new URLSearchParams();
@@ -281,9 +269,7 @@ function irParaCentral() {
   window.location.href = "central.html";
 }
 
-// =====================================================
-// CHECAGEM DE LOGIN AO CARREGAR A PÁGINA
-// =====================================================
+// Checagem de login ao carregar a página
 function checarLogin() {
   const token = localStorage.getItem("nippon_token");
   const username = localStorage.getItem("nippon_username");
@@ -291,7 +277,7 @@ function checarLogin() {
   const authBox = document.getElementById("navbar-auth");
   const userBox = document.getElementById("navbar-user");
 
-  // essa lógica só existe na navbar pública (index.html) — central.html não tem esses elementos
+  // essa lógica só existe na navbar pública (index.html) - central.html não tem esses elementos
   if (!authBox || !userBox) return;
 
   if (token) {
@@ -304,14 +290,8 @@ function checarLogin() {
   }
 }
 
-// =====================================================
-// TEMA (claro/escuro) — só existe na navbar pública
-// sempre começa no escuro (não salva preferência entre recarregamentos)
-// =====================================================
-// =====================================================
-// TEMA (claro/escuro) — persiste durante a aba aberta (sessionStorage),
+// Tema (claro/escuro) - persiste durante a aba aberta (sessionStorage),
 // mas nunca "pra sempre": fechar a aba/navegador reseta pro escuro de novo
-// =====================================================
 function alternarTema() {
   document.body.classList.toggle("light-mode");
   const claro = document.body.classList.contains("light-mode");
@@ -334,9 +314,7 @@ function atualizarIconeTema() {
   icon.className = claro ? "ti ti-moon" : "ti ti-sun";
 }
 
-// =====================================================
-// MENU MOBILE (hambúrguer)
-// =====================================================
+// Menu mobile (hambúrguer)
 function alternarMenuMobile() {
   const menu = document.getElementById("navbar-mobile-menu");
   const icon = document.getElementById("menu-hamburguer-icon");
@@ -353,9 +331,7 @@ function fecharMenuMobile() {
   if (icon) icon.className = "ti ti-menu-2";
 }
 
-// =====================================================
-// SCROLLSPY — atualiza qual link do menu fica "ativo" conforme rola a página
-// =====================================================
+// Scrollspy - atualiza qual link do menu fica "ativo" conforme rola a página
 function inicializarScrollspy() {
   const secoes = document.querySelectorAll("section[id]");
   const links = document.querySelectorAll(".navbar-menu a, .navbar-mobile-menu a");
@@ -374,7 +350,7 @@ function inicializarScrollspy() {
     });
 
     // se a última seção for mais baixa que a tela, a conta acima nunca "alcança" ela
-    // (o navegador não deixa rolar além do necessário) — então força manualmente
+    // (o navegador não deixa rolar além do necessário) - então força manualmente
     // quando o usuário já está no fim da página, não importa o cálculo de offsetTop
     const chegouNoFim = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
     if (chegouNoFim) {
@@ -390,11 +366,9 @@ function inicializarScrollspy() {
   atualizarLinkAtivo(); // roda uma vez já na carga (ex: se a página abrir com scroll restaurado)
 }
 
-// =====================================================
-// ANIMAÇÃO DE ENTRADA AO ROLAR
+// Animação de entrada ao rolar
 // toca só na primeira vez que cada seção aparece na tela; não repete
 // até a página ser recarregada (o "reset" natural é o F5, não precisa salvar em lugar nenhum)
-// =====================================================
 function inicializarAnimacaoEntrada() {
   const alvos = document.querySelectorAll(".reveal-esquerda, .reveal-direita");
   if (!alvos.length) return;
@@ -404,7 +378,7 @@ function inicializarAnimacaoEntrada() {
       entradas.forEach((entrada) => {
         if (entrada.isIntersecting) {
           entrada.target.classList.add("revelado");
-          observer.unobserve(entrada.target); // já revelou — não precisa mais ficar de olho nela
+          observer.unobserve(entrada.target); // já revelou, não precisa mais observar
         }
       });
     },
