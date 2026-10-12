@@ -83,6 +83,26 @@
   telaPequena.addEventListener("change", prepararVideo);
 
   // =====================================================
+  // MODAIS — não fechar quando o clique começa dentro e termina fora
+  // o script.js fecha o modal no "click" quando o alvo é o fundo (.modal-overlay).
+  // se a pessoa aperta o mouse dentro do modal (ex: selecionando texto num campo)
+  // e solta no fundo, o navegador dispara o click no fundo e o modal fechava.
+  // aqui anotamos onde o mouse foi apertado e solto; se não foram os dois no fundo,
+  // o click é barrado na fase de captura, antes de chegar no listener do script.js.
+  // =====================================================
+  let apertouNoFundo = false;
+  let soltouNoFundo = false;
+  const ehFundoDoModal = (el) => el && el.classList && el.classList.contains("modal-overlay");
+
+  document.addEventListener("pointerdown", (e) => { apertouNoFundo = ehFundoDoModal(e.target); }, true);
+  document.addEventListener("pointerup", (e) => { soltouNoFundo = ehFundoDoModal(e.target); }, true);
+  document.addEventListener("click", (e) => {
+    if (ehFundoDoModal(e.target) && !(apertouNoFundo && soltouNoFundo)) {
+      e.stopPropagation();
+    }
+  }, true);
+
+  // =====================================================
   // PAINEL — sidebar recolhível no celular
   // =====================================================
   const btnSidebar = document.getElementById("sidebar-toggle");
