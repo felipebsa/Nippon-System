@@ -615,12 +615,11 @@ body.pagina-rolada .hero-brand {
   object-fit: cover;
 }
 
-/* escurece da esquerda pra direita + brilho vermelho vindo da esquerda */
+/* escurece da esquerda pra direita */
 .hero-overlay {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 75% at 0% 62%, rgba(200, 5, 15, 0.32), transparent 70%),
     linear-gradient(100deg,
       rgba(7, 7, 7, 0.95) 6%,
       rgba(7, 7, 7, 0.80) 38%,
@@ -834,7 +833,6 @@ body.pagina-rolada .hero-brand {
 
 /* indicadores (bolinhas) */
 .hero-dots {
-  display: none !important;
   position: absolute;
   bottom: 30px;
   left: 50%;
@@ -1844,7 +1842,6 @@ body.light-mode .contact-section {
 
   .hero-overlay {
     background:
-      radial-gradient(ellipse 90% 50% at 0% 70%, rgba(200, 5, 15, 0.3), transparent 70%),
       linear-gradient(180deg,
         rgba(7, 7, 7, 0.55) 0%,
         rgba(7, 7, 7, 0.35) 35%,
