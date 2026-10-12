@@ -7,9 +7,9 @@
   <link rel="icon" type="image/png" href="../img/logo-flutuante.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/global.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.35.0/dist/tabler-icons.min.css" />
 </head>
 <body>
 
@@ -67,14 +67,21 @@
       <div class="hero-slide"><img src="../img/carro-06.jpg" alt="Serviço Nippon Detail 6" /></div>
     </div>
 
+    <!-- vídeo vertical do hero: só é carregado no celular (efeitos.js), no computador ficam as fotos -->
+    <video class="hero-video" id="hero-video" data-src="../img/hero-mobile.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
+      <span class="hero-selo">Estética automotiva premium</span>
       <h1>Proteção e brilho<br>inigualável para <span>seu veículo</span></h1>
       <p>Proteção veicular, estética automotiva premium, PPF, vitrificação.</p>
-      <button class="hero-cta" onclick="abrirModalOrcamento()">
-        Solicitar orçamento personalizado <i class="ti ti-arrow-right"></i>
-      </button>
+      <div class="hero-acoes">
+        <button class="hero-cta" onclick="abrirModalOrcamento()">
+          Solicitar orçamento personalizado <i class="ti ti-arrow-right"></i>
+        </button>
+        <a href="#servicos" class="btn-vidro">Ver serviços</a>
+      </div>
       <div class="hero-badges">
         <div class="hero-badge"><span class="hero-badge-icon"><i class="ti ti-star-filled"></i></span> Reconhecimento 5 Estrelas no Google</div>
         <div class="hero-badge"><span class="hero-badge-icon"><i class="ti ti-shield-check"></i></span> Garantia de Qualidade e Satisfação</div>
@@ -113,9 +120,13 @@
         </div>
       </div>
 
+      <div class="about-foto">
+        <img src="../img/loja.jpg" alt="Fachada da Nippon Detail" loading="lazy" />
+      </div>
+
       <div class="about-stats">
         <div class="about-stat-card">
-          <div class="about-stat-num" id="about-contador-carros">150+</div>
+          <div class="about-stat-num" id="about-contador-carros">200+</div>
           <div class="about-stat-label">Carros atendidos</div>
         </div>
         <div class="about-stat-card">
@@ -233,6 +244,11 @@
     <div class="services-header">
       <span class="services-eyebrow">連絡 · Contato</span>
       <h2>Fale com a <span>Nippon Detail</span></h2>
+    </div>
+
+    <div class="contato-acoes">
+      <button class="btn-brilho" onclick="abrirModalOrcamento()">Peça seu orçamento <i class="ti ti-arrow-right"></i></button>
+      <a href="https://wa.me/5511996968893" target="_blank" class="btn-vidro"><i class="ti ti-brand-whatsapp"></i> Chamar no WhatsApp</a>
     </div>
 
     <div class="contact-grid">
@@ -385,5 +401,6 @@
   </div>
 
   <script src="../js/script.js"></script>
+  <script src="../js/efeitos.js"></script>
 </body>
 </html>
