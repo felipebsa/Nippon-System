@@ -12,14 +12,14 @@ class SchemaServiceCreate(BaseModel):
     value: float
 
 class SchemaServiceUpdate(BaseModel):
-    title: Optional[str]
-    desc: Optional[str]
+    title: str
+    desc: str
     date_release: Optional[datetime]
-    kind: Optional[str]
-    value: Optional[float]
+    kind: str
+    value: float
 
 class SchemaServiceFinish(BaseModel):
-    finish: Optional[bool]
+    finish: bool
 
 class SchemaServiceResponse(BaseModel):
     service_id: int

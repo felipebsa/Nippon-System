@@ -32,7 +32,7 @@ def get_all_materials(db: Session = Depends(get_db), _=Depends(get_current_user)
         raise HTTPException(status_code=404, detail="material não encontrado.")
     return db_materials
 
-@router.get("/material/get/id/{id}", response_model=list[SchemaMaterialResponse])
+@router.get("/material/get/id/{id}", response_model=SchemaMaterialResponse)
 def get_material_by_id(id: int, db: Session = Depends(get_db), _=Depends(get_current_user)):
     query = select(Material).where(Material.material_id==id)
     db_material = db.execute(query).scalars().first()
@@ -97,7 +97,7 @@ def update_stock_material(id: int, material: SchemaMaterialStock, db: Session=De
     if db_material_past < material.quantity:
         db_expense = Expense(
             name = db_material.name,
-            value = db_material.value,
+            value = (material.quantity - db_material_past) * db_material.value,
             date = datetime.now(),
             origin = "automatic"
         )

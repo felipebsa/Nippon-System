@@ -16,6 +16,8 @@ router = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
+TOKEN_EXPIRE_DAYS = 7
+PASSWORD_MIN_LENGTH = 8
 
 pwd_context = CryptContext(schemes=['bcrypt'])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -32,16 +34,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise HTTPException(status_code=401, detail="id not found")
     return db_user
 
-@router.get("/auth/debug")
-def get_debug(c_user = Depends(get_current_user)):
-    return {"username": c_user.username}
-
 @router.get("/")
 def auth_home():
     return {"message": "auth_home successful"}
 
 @router.post("/auth/register")
 def create_user(user: SchemaRegister, db: Session = Depends(get_db), _=Depends(get_current_user)):
+    if len(user.password) < PASSWORD_MIN_LENGTH:
+        raise HTTPException(status_code=400, detail=f"A senha deve ter no mínimo {PASSWORD_MIN_LENGTH} caracteres.")
     query = select(User).where(User.username==user.username)
     db_user = db.execute(query).scalars().first()
     if db_user:
@@ -59,15 +59,12 @@ def create_user(user: SchemaRegister, db: Session = Depends(get_db), _=Depends(g
 def acess_user(user: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     query = select(User).where(User.username==user.username)
     db_user = db.execute(query).scalars().first()
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="username not exists")
-    is_valid = pwd_context.verify(user.password, db_user.pass_hash)
-    if not is_valid:
-        raise HTTPException(status_code=401, detail="password incorrect")
+    if db_user is None or not pwd_context.verify(user.password, db_user.pass_hash):
+        raise HTTPException(status_code=401, detail="Usuário ou senha incorretos.")
     payload = {
         "user_id": db_user.user_id,
         "username": db_user.username,
-        "exp": datetime.now(timezone.utc) + timedelta(days=30)
+        "exp": datetime.now(timezone.utc) + timedelta(days=TOKEN_EXPIRE_DAYS)
     }
     token = jwt.encode(payload, SECRET_KEY, ALGORITHM)
     return {"access_token": token, "token_type": "bearer"}

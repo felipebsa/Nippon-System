@@ -11,20 +11,20 @@ class SchemaMaterialCreate(BaseModel):
     available: bool 
 
 class SchemaMaterialUpdate(BaseModel):
-    name: Optional[str] 
-    mark: Optional[str] 
-    quantity: Optional[int] 
-    value: Optional[float]  
+    name: str
+    mark: str
+    quantity: int
+    value: float
     date_available: Optional[datetime]
-    expired: Optional[bool]  
-    available: Optional[bool]  
+    expired: bool
+    available: bool
 class SchemaMaterialExpired(BaseModel):
     expired: bool 
 class SchemaMaterialAvailable(BaseModel):
     available: bool 
 class SchemaMaterialStock(BaseModel):
-    quantity: Optional[int] 
-    value: Optional[float]   
+    quantity: int
+    value: float
 class SchemaMaterialResponse(BaseModel):
     model_config = {"from_attributes": True}
     material_id: int

@@ -10,7 +10,7 @@ class SchemaClientCreate(BaseModel):
     tel: Optional[str]
 
 class SchemaClientUpdate(BaseModel):
-    name: Optional[str]
+    name: str
     cpf: Optional[str]
     cep: Optional[str]
     address: Optional[str]

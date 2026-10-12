@@ -8,8 +8,8 @@ class SchemaVehicleCreate(BaseModel):
     kind: Optional[str]
 
 class SchemaVehicleUpdate(BaseModel):
-    model: Optional[str]
-    plate: Optional[str]
+    model: str
+    plate: str
     kind: Optional[str]
 
 class SchemaVehicleActive(BaseModel):

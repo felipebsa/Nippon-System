@@ -87,7 +87,7 @@ def update_active_vehicle(id: int, vehicle: SchemaVehicleActive, db: Session=Dep
         raise HTTPException(status_code=404, detail="veículo não encontrado.")
     db_vehicle.active = vehicle.active
     if vehicle.active == False:
-        service_query = select(Service).where(Service.client_id==id)
+        service_query = select(Service).where(Service.vehicle_id==id)
         db_services = db.execute(service_query).scalars().all()
         for service in db_services:
             service.finish = True
