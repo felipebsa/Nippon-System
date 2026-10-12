@@ -7,10 +7,10 @@
   <link rel="icon" type="image/png" href="../img/logo-flutuante.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/central.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.35.0/dist/tabler-icons.min.css" />
 </head>
 <body class="central-body">
 
@@ -52,10 +52,18 @@
     </div>
   </aside>
 
+  <!-- fundo escuro atrás da sidebar quando ela abre no celular (efeitos.js) -->
+  <div class="sidebar-fundo" id="sidebar-fundo"></div>
+
   <!-- ÁREA PRINCIPAL -->
   <div class="main">
     <header class="topbar">
-      <span class="page-title" id="page-title">Central</span>
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle" title="Menu" aria-label="Abrir menu" aria-expanded="false">
+          <i class="ti ti-menu-2"></i>
+        </button>
+        <span class="page-title" id="page-title">Central</span>
+      </div>
       <div class="topbar-right">
         <button class="theme-toggle" id="theme-toggle" onclick="alternarTema()" title="Alternar tema">
           <i class="ti ti-sun" id="theme-toggle-icon"></i>
@@ -76,7 +84,7 @@
         <div class="stats-row">
           <div class="stat-card"><div class="stat-label">Clientes</div><div class="stat-val" id="stat-clientes">—</div></div>
           <div class="stat-card"><div class="stat-label">Veículos</div><div class="stat-val" id="stat-veiculos">—</div></div>
-          <div class="stat-card"><div class="stat-label">Serviços pendentes</div><div class="stat-val red" id="stat-pendentes">—</div></div>
+          <div class="stat-card stat-destaque"><div class="stat-label">Serviços pendentes</div><div class="stat-val red" id="stat-pendentes">—</div></div>
           <div class="stat-card"><div class="stat-label">Serviços concluídos</div><div class="stat-val" id="stat-concluidos">—</div></div>
           <div class="stat-card"><div class="stat-label">Materiais em estoque</div><div class="stat-val" id="stat-materiais">—</div></div>
         </div>
@@ -485,8 +493,9 @@
   <!-- TOOLTIP FLUTUANTE DO CALENDÁRIO -->
   <div class="cal-tooltip" id="cal-tooltip"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
   <script src="../js/script.js"></script>
   <script src="../js/central.js"></script>
+  <script src="../js/efeitos.js"></script>
 </body>
 </html>

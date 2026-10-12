@@ -1,6 +1,7 @@
 // =====================================================
 // EFEITOS VISUAIS — só aparência, nenhuma lógica do site depende daqui.
-// fica dentro de uma IIFE pra não colidir com as variáveis globais do script.js
+// usado no index.html e no central.html (cada bloco checa se o elemento existe).
+// fica dentro de uma IIFE pra não colidir com as variáveis globais do script.js/central.js
 // =====================================================
 (function () {
   const reduzirMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -23,18 +24,20 @@
 
   // =====================================================
   // BRILHO QUE SEGUE O MOUSE NOS CARDS
-  // atualiza --mx/--my, que o CSS usa no radial-gradient do ::before/::after
+  // atualiza --mx/--my, que o CSS usa no radial-gradient do ::before/::after.
+  // delegação no document: pega também os cards que o central.js cria depois
   // =====================================================
   const temMouse = window.matchMedia("(hover: hover)").matches;
+  const CARDS_COM_BRILHO = ".service-card, .contact-card, .escolha-card, .item-card";
 
   if (temMouse) {
-    document.querySelectorAll(".service-card, .contact-card, .escolha-card").forEach((card) => {
-      card.addEventListener("pointermove", (e) => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        card.style.setProperty("--my", `${e.clientY - r.top}px`);
-      });
-    });
+    document.addEventListener("pointermove", (e) => {
+      const card = e.target.closest && e.target.closest(CARDS_COM_BRILHO);
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--my", `${e.clientY - r.top}px`);
+    }, { passive: true });
   }
 
   // =====================================================
@@ -78,4 +81,47 @@
 
   prepararVideo();
   telaPequena.addEventListener("change", prepararVideo);
+
+  // =====================================================
+  // PAINEL — sidebar recolhível no celular
+  // =====================================================
+  const btnSidebar = document.getElementById("sidebar-toggle");
+  const fundoSidebar = document.getElementById("sidebar-fundo");
+
+  function definirSidebar(aberta) {
+    document.body.classList.toggle("sidebar-aberta", aberta);
+    if (btnSidebar) {
+      btnSidebar.setAttribute("aria-expanded", String(aberta));
+      btnSidebar.querySelector(".ti").className = aberta ? "ti ti-x" : "ti ti-menu-2";
+    }
+  }
+
+  if (btnSidebar) {
+    btnSidebar.addEventListener("click", () => {
+      definirSidebar(!document.body.classList.contains("sidebar-aberta"));
+    });
+    if (fundoSidebar) fundoSidebar.addEventListener("click", () => definirSidebar(false));
+    // ao escolher uma tela no menu, fecha (o onclick do link continua fazendo a troca de view)
+    document.querySelectorAll(".sidebar .nav-item").forEach((item) => {
+      item.addEventListener("click", () => definirSidebar(false));
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") definirSidebar(false);
+    });
+    telaPequena.addEventListener("change", () => definirSidebar(false));
+  }
+
+  // =====================================================
+  // PAINEL — redesenha o gráfico quando o tema muda,
+  // pra ele pegar as cores do tema novo (as cores vêm das variáveis CSS)
+  // =====================================================
+  if (typeof renderizarGraficoFinanceiro === "function") {
+    let claroAntes = document.body.classList.contains("light-mode");
+    new MutationObserver(() => {
+      const claro = document.body.classList.contains("light-mode");
+      if (claro === claroAntes) return; // outra classe mudou (ex: sidebar abrindo)
+      claroAntes = claro;
+      if (typeof graficoFinanceiro !== "undefined" && graficoFinanceiro) renderizarGraficoFinanceiro();
+    }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  }
 })();

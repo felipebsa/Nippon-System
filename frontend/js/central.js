@@ -1750,25 +1750,48 @@ function renderizarGraficoFinanceiro() {
 
   const corTexto = corVar("--text-secundario");
   const corGrade = corVar("--borda");
+  const fonte = { family: "Inter, 'Segoe UI', system-ui, sans-serif", size: 12 };
 
   graficoFinanceiro = new Chart(canvas, {
     type: "bar",
     data: {
       labels,
       datasets: [
-        { label: "Receita", data: dadosReceita, backgroundColor: corVar("--verde-ok") },
-        { label: "Despesa", data: dadosDespesa, backgroundColor: corVar("--vermelho") },
+        {
+          label: "Receita", data: dadosReceita,
+          backgroundColor: corVar("--text-primario"), hoverBackgroundColor: corVar("--text-secundario"),
+          borderRadius: 6, borderSkipped: false, maxBarThickness: 34,
+        },
+        {
+          label: "Despesa", data: dadosDespesa,
+          backgroundColor: corVar("--vermelho"), hoverBackgroundColor: corVar("--vermelho-claro"),
+          borderRadius: 6, borderSkipped: false, maxBarThickness: 34,
+        },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: corTexto } },
+        legend: {
+          labels: { color: corTexto, font: fonte, usePointStyle: true, pointStyle: "rectRounded", boxWidth: 10, boxHeight: 10, padding: 18 },
+        },
+        tooltip: {
+          backgroundColor: corVar("--superficie-elevada"),
+          titleColor: corVar("--text-primario"),
+          bodyColor: corVar("--text-secundario"),
+          borderColor: corVar("--borda-forte"),
+          borderWidth: 1,
+          padding: 10,
+          cornerRadius: 10,
+          usePointStyle: true,
+          titleFont: { ...fonte, weight: "600" },
+          bodyFont: fonte,
+        },
       },
       scales: {
-        x: { ticks: { color: corTexto }, grid: { color: corGrade } },
-        y: { ticks: { color: corTexto }, grid: { color: corGrade } },
+        x: { ticks: { color: corTexto, font: fonte }, grid: { display: false }, border: { color: corGrade } },
+        y: { ticks: { color: corTexto, font: fonte }, grid: { color: corGrade }, border: { display: false } },
       },
     },
   });
