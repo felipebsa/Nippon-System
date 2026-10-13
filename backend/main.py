@@ -19,7 +19,7 @@ from models.vehicle import Vehicle
 from models.expense import Expense
 
 app = FastAPI()
-Base.metadata.create_all(bind=engine)
+
 
 #settings Cors
 app.add_middleware(
