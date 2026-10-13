@@ -58,6 +58,11 @@ nippon-system/
 │   │   ├── service.py
 │   │   ├── material.py
 │   │   └── expense.py
+│   ├── alembic/
+│   │   ├── versions/        # migration scripts
+│   │   ├── env.py           # wired to Base.metadata and DATABASE_URL
+│   │   └── script.py.mako
+│   ├── alembic.ini
 │   ├── database.py
 │   ├── main.py
 │   └── requirements.txt
@@ -85,6 +90,7 @@ The app runs split across two platforms, connected only through the API's public
 - **Frontend (static)** → [Netlify](https://netlify.com) — `index.html` and `central.html` are plain static files, so there's no build step; Netlify just publishes the `frontend/` directory as-is on every push to `main`.
 - **CORS**: `allow_origins` in `main.py` is scoped to the Netlify domain instead of `"*"`, since the API is now reachable from the public internet.
 - The first (and only) admin account is seeded directly into the production database via `psql` — there's no public registration endpoint to bootstrap from (see [Auth](#auth) below).
+- **Schema changes** go through Alembic migrations (see [Database Migrations](#database-migrations)), so columns can be added or changed without resetting the production database.
 
 ---
 
@@ -109,6 +115,9 @@ pip install -r requirements.txt
 #   SECRET_KEY=your_secret_key
 #   ALGORITHM=HS256
 
+# Create the tables
+alembic upgrade head
+
 # Run the server
 python -m uvicorn main:app --reload
 ```
@@ -119,7 +128,38 @@ Frontend: open `frontend/index.html` with Live Server on port **5500** (remember
 
 > **Note:** in this repository, `index.html` and `central.html` live directly inside `frontend/` (matching what's deployed to Netlify). If you move them into a subfolder (e.g. `frontend/templates/`) for local testing, update the relative paths to `css/`, `js/`, and `img/` in both files accordingly (they'd need an extra `../`).
 
-The database schema is created automatically on first run via SQLAlchemy's `Base.metadata.create_all()` — no manual migration needed.
+---
+
+## Database Migrations
+
+Schema changes are managed with [Alembic](https://alembic.sqlalchemy.org). All commands run from `backend/` and connect to whatever `DATABASE_URL` points to in `.env`.
+
+**Workflow for a model change** (e.g. adding a column):
+
+```bash
+# 1. Edit the model in models/
+# 2. Generate a migration by diffing the models against the database
+alembic revision --autogenerate -m "add phone to clients"
+# 3. Review the generated file in alembic/versions/ before applying it
+# 4. Apply it
+alembic upgrade head
+```
+
+Then commit the model change together with the migration file.
+
+| Command | What it does |
+|---------|--------------|
+| `alembic upgrade head` | Apply all pending migrations |
+| `alembic downgrade -1` | Revert the last migration |
+| `alembic current` | Show the database's current revision |
+| `alembic history` | List all migrations |
+| `alembic check` | Fail if the models and the database have drifted apart |
+| `alembic upgrade head --sql` | Print the SQL without running it |
+
+**Notes**
+- Autogenerate doesn't detect column renames (it sees a drop + add, which loses data). Always review the generated file.
+- Adding a `nullable=False` column to a table that already has rows fails unless it has a `server_default`.
+- To run migrations against production from a local machine, use the Postgres service's **public** URL (`DATABASE_PUBLIC_URL` in Railway) as `DATABASE_URL` in `.env`. The internal `postgres.railway.internal` host only resolves inside Railway's private network.
 
 ---
 
@@ -190,7 +230,7 @@ The database schema is created automatically on first run via SQLAlchemy's `Base
 
 ### Error Handling
 
-All routes return a `404` with a specific `detail` message when a referenced record (client, vehicle, service, material, expense) doesn't exist. Creating or updating a `Client` (unique `cpf`/`email`) or a `Vehicle` (unique `plate`) returns a `409 Conflict` with a specific `detail` message if the value is already registered to another record, instead of a raw database error.
+All routes return a `404` with a specific `detail` message when a referenced record (client, vehicle, service, material, expense) doesn't exist. Creating or updating a `Client` with a `cpf` or `email` already registered to another client, or a `Vehicle` with a duplicate `plate`, returns a `409 Conflict` with a specific `detail` message instead of a raw database error. For clients, `cpf` and `email` are optional and only checked when provided.
 
 ---
 
@@ -210,7 +250,7 @@ There is no public registration flow — the first (and, for now, only) account 
 |-------|------|-------------|
 | client_id | Integer | Primary key |
 | name | String | Client full name |
-| cpf | String | Unique Brazilian tax ID |
+| cpf | String (optional) | Brazilian tax ID (uniqueness checked by the API when provided) |
 | cep | String (optional) | Postal code |
 | address | String (optional) | Full address |
 | email | String (optional) | Client email |
@@ -240,6 +280,7 @@ There is no public registration flow — the first (and, for now, only) account 
 | kind | String | Service type |
 | date_release | DateTime (optional) | Expected delivery date |
 | value | Float | Service price |
+| labor_value | Float (optional) | Labor value |
 | finish | Boolean | Whether the service is completed |
 | created | DateTime | Registration timestamp |
 
@@ -289,6 +330,7 @@ There is no public registration flow — the first (and, for now, only) account 
 - [Python 3](https://python.org)
 - [FastAPI](https://fastapi.tiangolo.com)
 - [SQLAlchemy 2.0](https://sqlalchemy.org)
+- [Alembic](https://alembic.sqlalchemy.org) (database migrations)
 - [Pydantic](https://docs.pydantic.dev)
 - [PostgreSQL](https://postgresql.org)
 - [Uvicorn](https://www.uvicorn.org)
@@ -307,5 +349,3 @@ There is no public registration flow — the first (and, for now, only) account 
 ## Status
 
 ✅ **Live and feature-complete.** Client/vehicle/service/material management, delivery calendar, light/dark theme, a WhatsApp-based public quote form, and a full financial overview (manual + auto-generated expenses, revenue tracking, rankings) are all built, deployed, and working on PostgreSQL in production.
-
-📈 Next up: Docker and automated tests (pytest) — the remaining items from the original learning goals, not blockers for using the live app.
