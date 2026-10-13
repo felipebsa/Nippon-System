@@ -20,9 +20,10 @@ def create_client(client: SchemaClientCreate, db: Session = Depends(get_db), _=D
         email = client.email,
         tel = client.tel
     )
-    cpf_query = select(Client).where(Client.cpf == client.cpf)
-    if db.execute(cpf_query).scalars().first() is not None:
-        raise HTTPException(status_code=409, detail="Já existe um cliente cadastrado com esse CPF.")
+    if client.cpf:
+        cpf_query = select(Client).where(Client.cpf == client.cpf)
+        if db.execute(cpf_query).scalars().first() is not None:
+            raise HTTPException(status_code=409, detail="Já existe um cliente cadastrado com esse CPF.")
     if client.email:
         email_query = select(Client).where(Client.email == client.email)
         if db.execute(email_query).scalars().first() is not None:
@@ -85,9 +86,10 @@ def update_client(id: int, client: SchemaClientUpdate, db: Session=Depends(get_d
     db_client.address = client.address
     db_client.email = client.email
     db_client.tel = client.tel
-    cpf_query = select(Client).where(Client.cpf == client.cpf, Client.client_id != id)
-    if db.execute(cpf_query).scalars().first() is not None:
-        raise HTTPException(status_code=409, detail="Já existe outro cliente cadastrado com esse CPF.")
+    if client.cpf:
+        cpf_query = select(Client).where(Client.cpf == client.cpf, Client.client_id != id)
+        if db.execute(cpf_query).scalars().first() is not None:
+            raise HTTPException(status_code=409, detail="Já existe outro cliente cadastrado com esse CPF.")
     if client.email:
         email_query = select(Client).where(Client.email == client.email, Client.client_id != id)
         if db.execute(email_query).scalars().first() is not None:

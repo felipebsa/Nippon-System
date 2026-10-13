@@ -23,7 +23,7 @@ class SchemaClientExpired(BaseModel):
 class SchemaClientResponse(BaseModel):
     client_id: int
     name: str
-    cpf: str
+    cpf: Optional[str]
     cep: Optional[str]
     address: Optional[str]
     email: Optional[str]
